@@ -303,7 +303,7 @@ def open_history_tab(master):
         # Set labels and legends
         ax.set_xlabel('Date')
         ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
-        ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 5)))
+        ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 7)))
 
         if ax_temp:
             ax_temp.set_ylabel('Temperature (°C)')
