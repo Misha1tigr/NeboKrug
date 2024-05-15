@@ -15,7 +15,7 @@ settings_schema = {
 
 
 def get_settings_path():
-    settings_dir = platformdirs.user_config_dir("NeboKrug")
+    settings_dir = platformdirs.user_config_dir("NeboKrug", "Korbut Mykhailo")
     os.makedirs(settings_dir, exist_ok=True)
     return os.path.join(settings_dir, "settings.json")
 

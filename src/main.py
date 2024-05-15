@@ -89,7 +89,8 @@ def settings_units_window(root):
     save_and_close_btn = ttk.Button(frame, text="Save & Close", command=on_save_and_close)
     save_and_close_btn.grid(column=0, row=3, columnspan=2, pady=10)
 
-    root.attributes("-disabled", 1)  # Disable the main window until settings are closed
+    settings_window.transient(root)
+    settings_window.grab_set()
 
 
 def create_tabs(root):
