@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from settings_manager import save_settings, load_settings, save_locations
-from geocoding import search_location
+from api import search_location, get_historical_weather_data
 
 
 def create_menu_bar(root):
