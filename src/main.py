@@ -2,13 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from settings_manager import save_settings, load_settings, save_locations, extract_units
-from api import search_location, get_historical_weather_data
+from api import search_location, get_historical_weather_data, get_forecast_data
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.dates import DateFormatter
 import pandas as pd
 from tkcalendar import DateEntry
-
+color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "magenta", "lime", "pink", "teal", "lavender", "brown", "beige", "maroon", "mint", "olive", "coral", "navy", "grey"]
 
 def create_menu_bar(root):
     menubar = tk.Menu(root)
@@ -131,6 +131,8 @@ def settings_locations_window(root):
     def on_save_and_close():
         locations = stored_locations_listbox.locations
         save_locations(locations)  # Save the locations to the JSON file
+        open_history_tab(history_frame)
+        open_forecast_tab(forecast_frame)
         locations_window.destroy()
 
     locations = load_settings().get("locations", [])  # Load locations from the JSON file
@@ -187,7 +189,6 @@ def settings_locations_window(root):
     locations_window.grab_set()
 
 
-
 def open_history_tab(master):
     def on_refresh():
         location = location_var.get()
@@ -214,7 +215,8 @@ def open_history_tab(master):
         temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
 
         # Get historical weather data with units
-        data = get_historical_weather_data(latitude, longitude, start_date, end_date, temperature_unit, wind_speed_unit, precipitation_unit)
+        data = get_historical_weather_data(latitude, longitude, start_date, end_date, temperature_unit, wind_speed_unit,
+                                           precipitation_unit)
         update_graph(data, temperature_unit, wind_speed_unit, precipitation_unit)
 
     def update_graph(data, temperature_unit, wind_speed_unit, precipitation_unit):
@@ -248,7 +250,6 @@ def open_history_tab(master):
         # Create the main axis
         ax = fig.add_subplot(111)
 
-        color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
         color_index = 0
 
         ax_temp = None
@@ -335,6 +336,8 @@ def open_history_tab(master):
         fig.tight_layout()
         canvas.draw()
 
+    for widget in master.winfo_children():
+        widget.destroy()
     frame = ttk.Frame(master, padding="10")
     frame.pack(fill='both', expand=True)
 
@@ -371,7 +374,8 @@ def open_history_tab(master):
     ttk.Checkbutton(frame, text="Temperature Mean", variable=temperature_mean_var).grid(column=2, row=2, padx=5, pady=5)
 
     daylight_duration_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Daylight Duration", variable=daylight_duration_var).grid(column=3, row=0, padx=5, pady=5)
+    ttk.Checkbutton(frame, text="Daylight Duration", variable=daylight_duration_var).grid(column=3, row=0, padx=5,
+                                                                                          pady=5)
 
     precipitation_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text="Precipitation", variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
@@ -391,13 +395,229 @@ def open_history_tab(master):
     canvas.draw()
 
 
+def open_forecast_tab(master):
+    def on_refresh():
+        location = location_var.get()
+        if not location:
+            messagebox.showerror("Error", "Please select a location.")
+            return
+
+        for loc in stored_locations_listbox.locations:
+            if f"{loc['name']}, {loc['country']}" == location:
+                selected_location = loc
+                break
+        else:
+            selected_location = stored_locations_listbox.locations[0]
+        latitude = selected_location['latitude']
+        longitude = selected_location['longitude']
+
+        # Extract units from settings
+        temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
+
+        # Get forecast weather data with units
+        data = get_forecast_data(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit)
+        update_graph(data, temperature_unit, wind_speed_unit, precipitation_unit)
+
+    def update_graph(data, temperature_unit, wind_speed_unit, precipitation_unit):
+        fig.clear()
+
+        selected_columns = []
+        if temperature_2m_var.get():
+            selected_columns.append('temperature_2m')
+        if relative_humidity_var.get():
+            selected_columns.append('relative_humidity_2m')
+        if apparent_temperature_var.get():
+            selected_columns.append('apparent_temperature')
+        if precipitation_probability_var.get():
+            selected_columns.append('precipitation_probability')
+        if precipitation_var.get():
+            selected_columns.append('precipitation')
+        if surface_pressure_var.get():
+            selected_columns.append('surface_pressure')
+        if visibility_var.get():
+            selected_columns.append('visibility')
+        if wind_speed_var.get():
+            selected_columns.append('wind_speed_10m')
+        if uv_index_var.get():
+            selected_columns.append('uv_index')
+
+        if not selected_columns:
+            messagebox.showerror("Error", "Please select at least one data type to display.")
+            return
+
+        # Convert date column to datetime
+        data['date'] = pd.to_datetime(data['date'])
+
+        # Shorten the data according to slider value
+        forecast_days = int(forecast_slider.get())
+        data = data.iloc[:forecast_days * 24, :]  # 24 hours in a day
+
+        # Adjust data frequency if too many points
+        if len(data) > 100:
+            data = data.iloc[::len(data) // 100, :]
+
+        # Create the main axis
+        ax = fig.add_subplot(111)
+
+        color_index = 0
+
+        ax_temp = None
+        ax_precip = None
+        ax_visibility = None
+        ax_wind = None
+
+        if 'temperature_2m' in selected_columns or 'apparent_temperature' in selected_columns:
+            ax_temp = ax
+            color_index += 1
+
+        if 'precipitation' in selected_columns or 'precipitation_probability' in selected_columns:
+            ax_precip = ax.twinx()
+            ax_precip.spines['right'].set_position(('outward', 60))
+            color_index += 1
+
+        if 'visibility' in selected_columns:
+            ax_visibility = ax.twinx()
+            ax_visibility.spines['right'].set_position(('outward', 120))
+            color_index += 1
+
+        if 'wind_speed_10m' in selected_columns:
+            ax_wind = ax.twinx()
+            ax_wind.spines['left'].set_position(('outward', 60))
+            color_index += 1
+
+        # Plot each selected column
+        for col in selected_columns:
+            if col == 'temperature_2m':
+                ax_temp.plot(data['date'], data['temperature_2m'], label=f'Temperature 2m ({temperature_unit})',
+                             color=color_cycle[color_index])
+            elif col == 'relative_humidity_2m':
+                ax.plot(data['date'], data['relative_humidity_2m'], label='Relative Humidity 2m (%)',
+                        color=color_cycle[color_index])
+            elif col == 'apparent_temperature':
+                ax_temp.plot(data['date'], data['apparent_temperature'],
+                             label=f'Apparent Temperature ({temperature_unit})', color=color_cycle[color_index])
+            elif col == 'precipitation_probability':
+                ax_precip.plot(data['date'], data['precipitation_probability'], label='Precipitation Probability (%)',
+                               color=color_cycle[color_index])
+            elif col == 'precipitation':
+                ax_precip.bar(data['date'], data['precipitation'], label=f'Precipitation ({precipitation_unit})',
+                              color=color_cycle[color_index], alpha=0.5, width=1)
+            elif col == 'surface_pressure':
+                ax.plot(data['date'], data['surface_pressure'], label='Surface Pressure (hPa)',
+                        color=color_cycle[color_index])
+            elif col == 'visibility':
+                ax_visibility.plot(data['date'], data['visibility'], label='Visibility (km)',
+                                   color=color_cycle[color_index])
+            elif col == 'wind_speed_10m':
+                ax_wind.plot(data['date'], data['wind_speed_10m'], label=f'Wind Speed ({wind_speed_unit})',
+                             color=color_cycle[color_index])
+            elif col == 'uv_index':
+                ax.plot(data['date'], data['uv_index'], label='UV Index', color=color_cycle[color_index])
+
+            color_index += 1
+
+        # Set labels and legends
+        ax.set_xlabel('Date')
+        ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
+        ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 10)))
+
+        if ax_temp:
+            ax_temp.set_ylabel(f'Temperature ({temperature_unit})')
+            ax_temp.legend(loc='upper left')
+
+        if ax_precip:
+            ax_precip.set_ylabel(f'Precipitation ({precipitation_unit})')
+            ax_precip.legend(loc='upper right')
+
+        if ax_visibility:
+            ax_visibility.set_ylabel('Visibility (km)')
+            ax_visibility.legend(loc='center right')
+
+        if ax_wind:
+            ax_wind.set_ylabel(f'Wind Speed ({wind_speed_unit})')
+            ax_wind.legend(loc='lower right')
+
+        # Remove the left spine if no temperature data is plotted there
+        if not temperature_2m_var.get() and not apparent_temperature_var.get():
+            ax.spines['left'].set_color('none')
+            ax.tick_params(left=False, labelleft=False)
+
+        fig.tight_layout()
+        canvas.draw()
+
+    for widget in master.winfo_children():
+        widget.destroy()
+    frame = ttk.Frame(master, padding="10")
+    frame.pack(fill='both', expand=True)
+
+    # Location selection combobox
+    ttk.Label(frame, text="Location").grid(column=0, row=0, padx=5, pady=5)
+    location_var = tk.StringVar()
+    stored_locations_listbox = tk.Listbox(frame)
+    stored_locations_listbox.locations = load_settings().get("locations", [])
+    location_combobox = ttk.Combobox(frame, textvariable=location_var, state="readonly",
+                                     values=[f"{loc['name']}, {loc['country']}" for loc in
+                                             stored_locations_listbox.locations])
+    location_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+    # Checkboxes for data selection
+    temperature_2m_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Temperature 2m", variable=temperature_2m_var).grid(column=2, row=0, padx=5, pady=5)
+
+    relative_humidity_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Relative Humidity 2m", variable=relative_humidity_var).grid(column=2, row=1, padx=5,
+                                                                                             pady=5)
+
+    apparent_temperature_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Apparent Temperature", variable=apparent_temperature_var).grid(column=2, row=2, padx=5,
+                                                                                                pady=5)
+
+    precipitation_probability_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Precipitation Probability", variable=precipitation_probability_var).grid(column=3,
+                                                                                                          row=0, padx=5,
+                                                                                                          pady=5)
+
+    precipitation_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Precipitation", variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
+
+    surface_pressure_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Surface Pressure", variable=surface_pressure_var).grid(column=3, row=2, padx=5, pady=5)
+
+    visibility_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Visibility", variable=visibility_var).grid(column=4, row=0, padx=5, pady=5)
+
+    wind_speed_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="Wind Speed", variable=wind_speed_var).grid(column=4, row=1, padx=5, pady=5)
+
+    uv_index_var = tk.BooleanVar()
+    ttk.Checkbutton(frame, text="UV Index", variable=uv_index_var).grid(column=4, row=2, padx=5, pady=5)
+
+    # Refresh button
+    refresh_button = ttk.Button(frame, text="Refresh", command=on_refresh)
+    refresh_button.grid(column=5, row=0, padx=5, pady=5, rowspan=3, sticky=tk.N + tk.S)
+
+    # Canvas for the graph
+    fig, ax = plt.subplots(figsize=(10, 5))
+    canvas = FigureCanvasTkAgg(fig, master=frame)
+
+    canvas.get_tk_widget().grid(column=0, row=3, columnspan=6, pady=5)
+    canvas.draw()
+
+    # Slider for adjusting forecast days
+    ttk.Label(frame, text="Forecast Days").grid(column=0, row=4, padx=5, pady=5)
+    forecast_slider = ttk.Scale(frame, from_=1, to=14, orient='horizontal', length=400)
+    forecast_slider.set(14)
+    forecast_slider.grid(column=1, row=4, columnspan=5, pady=5)
+
+
 def create_tabs(root):
+    global history_frame, forecast_frame
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
 
     # Forecast Tab
     forecast_frame = ttk.Frame(notebook, padding="10")
-    ttk.Label(forecast_frame, text="Sample text for Forecast").pack()
+    open_forecast_tab(forecast_frame)
     notebook.add(forecast_frame, text="Forecast")
 
     # Forecast AI Tab
