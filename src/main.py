@@ -1,13 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from settings_manager import save_settings, load_settings, save_locations
+from settings_manager import save_settings, load_settings, save_locations, extract_units
 from api import search_location, get_historical_weather_data
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.dates import DateFormatter
 import pandas as pd
 from tkcalendar import DateEntry
+
 
 def create_menu_bar(root):
     menubar = tk.Menu(root)
@@ -186,6 +187,7 @@ def settings_locations_window(root):
     locations_window.grab_set()
 
 
+
 def open_history_tab(master):
     def on_refresh():
         location = location_var.get()
@@ -208,10 +210,14 @@ def open_history_tab(master):
         latitude = selected_location['latitude']
         longitude = selected_location['longitude']
 
-        data = get_historical_weather_data(latitude, longitude, start_date, end_date)
-        update_graph(data)
+        # Extract units from settings
+        temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
 
-    def update_graph(data):
+        # Get historical weather data with units
+        data = get_historical_weather_data(latitude, longitude, start_date, end_date, temperature_unit, wind_speed_unit, precipitation_unit)
+        update_graph(data, temperature_unit, wind_speed_unit, precipitation_unit)
+
+    def update_graph(data, temperature_unit, wind_speed_unit, precipitation_unit):
         fig.clear()
 
         selected_columns = []
@@ -237,7 +243,7 @@ def open_history_tab(master):
 
         # Adjust data frequency if too many points
         if len(data) > 100:
-            data = data.iloc[::len(data)//100, :]
+            data = data.iloc[::len(data) // 100, :]
 
         # Create the main axis
         ax = fig.add_subplot(111)
@@ -271,46 +277,46 @@ def open_history_tab(master):
 
         # Plot each selected column
         if 'temperature_2m_max' in selected_columns:
-            ax_temp.plot(data['date'], data['temperature_2m_max'], label='Temperature Max (°C)',
+            ax_temp.plot(data['date'], data['temperature_2m_max'], label=f'Temperature Max ({temperature_unit})',
                          color=color_cycle[color_index])
             color_index += 1
 
         if 'temperature_2m_min' in selected_columns:
-            ax_temp.plot(data['date'], data['temperature_2m_min'], label='Temperature Min (°C)',
+            ax_temp.plot(data['date'], data['temperature_2m_min'], label=f'Temperature Min ({temperature_unit})',
                          color=color_cycle[color_index])
             color_index += 1
 
         if 'temperature_2m_mean' in selected_columns:
-            ax_temp.plot(data['date'], data['temperature_2m_mean'], label='Temperature Mean (°C)',
+            ax_temp.plot(data['date'], data['temperature_2m_mean'], label=f'Temperature Mean ({temperature_unit})',
                          color=color_cycle[color_index])
             color_index += 1
 
         if 'daylight_duration' in selected_columns:
-            ax_daylight.plot(data['date'], data['daylight_duration'], label='Daylight Duration (hours)',
+            ax_daylight.plot(data['date'], data['daylight_duration'], label='Daylight Duration (seconds)',
                              color=color_cycle[color_index])
             color_index += 1
 
         if 'precipitation_sum' in selected_columns:
-            ax_precip.bar(data['date'], data['precipitation_sum'], label='Precipitation (mm)',
+            ax_precip.bar(data['date'], data['precipitation_sum'], label=f'Precipitation ({precipitation_unit})',
                           color=color_cycle[color_index], alpha=0.5, width=1)
             color_index += 1
 
         if 'wind_speed_10m_max' in selected_columns:
-            ax_wind.plot(data['date'], data['wind_speed_10m_max'], label='Wind Speed (m/s)',
+            ax_wind.plot(data['date'], data['wind_speed_10m_max'], label=f'Wind Speed ({wind_speed_unit})',
                          color=color_cycle[color_index])
             color_index += 1
 
         # Set labels and legends
         ax.set_xlabel('Date')
         ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
-        ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 7)))
+        ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 10)))
 
         if ax_temp:
-            ax_temp.set_ylabel('Temperature (°C)')
+            ax_temp.set_ylabel(f'Temperature ({temperature_unit})')
             ax_temp.legend(loc='upper left')
 
         if ax_precip:
-            ax_precip.set_ylabel('Precipitation (mm)')
+            ax_precip.set_ylabel(f'Precipitation ({precipitation_unit})')
             ax_precip.legend(loc='upper right')
 
         if ax_daylight:
@@ -318,7 +324,7 @@ def open_history_tab(master):
             ax_daylight.legend(loc='center right')
 
         if ax_wind:
-            ax_wind.set_ylabel('Wind Speed (m/s)')
+            ax_wind.set_ylabel(f'Wind Speed ({wind_speed_unit})')
             ax_wind.legend(loc='lower right')
 
         # Remove the left spine if no temperature data is plotted there
@@ -365,8 +371,7 @@ def open_history_tab(master):
     ttk.Checkbutton(frame, text="Temperature Mean", variable=temperature_mean_var).grid(column=2, row=2, padx=5, pady=5)
 
     daylight_duration_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Daylight Duration", variable=daylight_duration_var).grid(column=3, row=0, padx=5,
-                                                                                          pady=5)
+    ttk.Checkbutton(frame, text="Daylight Duration", variable=daylight_duration_var).grid(column=3, row=0, padx=5, pady=5)
 
     precipitation_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text="Precipitation", variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
@@ -384,6 +389,7 @@ def open_history_tab(master):
 
     canvas.get_tk_widget().grid(column=0, row=3, columnspan=5, padx=5, pady=5)
     canvas.draw()
+
 
 def create_tabs(root):
     notebook = ttk.Notebook(root)

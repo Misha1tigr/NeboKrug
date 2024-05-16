@@ -44,7 +44,6 @@ def load_settings():
             with open(settings_path, "r") as file:
                 settings = json.load(file)
                 validate_settings(settings)
-                print(settings)  #TODO remove
                 settings_loaded = True
                 return settings
     else:
@@ -75,3 +74,11 @@ def save_locations(locations):
     settings_to_update = load_settings()
     settings_to_update["locations"] = locations
     save_settings(settings_to_update)
+
+
+def extract_units():
+    settings_to_extract_from = load_settings()
+    temperature_unit = settings_to_extract_from.get("temperature_unit")
+    wind_speed_unit = settings_to_extract_from.get("wind_speed_unit")
+    precipitation_unit = settings_to_extract_from.get("precipitation_unit")
+    return temperature_unit, wind_speed_unit, precipitation_unit
