@@ -3,6 +3,7 @@ import openmeteo_requests
 import requests_cache
 import pandas as pd
 from retry_requests import retry
+from datetime import datetime
 
 
 def setup_openmeteo_client(cache_expire_after=3600):
@@ -161,6 +162,76 @@ def get_forecast_data(latitude, longitude, temperature_unit="celsius", wind_spee
     hourly_dataframe = pd.DataFrame(data=hourly_data)
     return hourly_dataframe
 
+def get_current_weather(latitude, longitude, temperature_unit="celsius",
+                        wind_speed_unit="m/s", precipitation_unit="mm"):
+    """
+    Fetches current weather data for specified coordinates.
+
+    Args:
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+        temperature_unit (str, optional): Units for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Units for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Units for precipitation. Defaults to 'mm'.
+
+    Returns:
+        str: Formatted string containing the current weather data.
+    """
+    # Convert units
+    temperature_unit_, wind_speed_unit_, precipitation_unit_ = convert_units(
+        temperature_unit, wind_speed_unit, precipitation_unit
+    )
+
+    # Setup the Open-Meteo API client with cache and retry on error
+    cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
+    retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
+    openmeteo = openmeteo_requests.Client(session=retry_session)
+
+    # API URL and parameters
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "current": ["relative_humidity_2m", "apparent_temperature", "rain", "showers", "snowfall", "wind_speed_10m",
+                    "wind_gusts_10m"],
+        "hourly": "temperature_2m",
+        "temperature_unit": temperature_unit_,
+        "wind_speed_unit": wind_speed_unit_,
+        "precipitation_unit": precipitation_unit_,
+        "timezone": "auto"
+    }
+
+    # Fetch weather data
+    responses = openmeteo.weather_api(url, params=params)
+
+    # Process first location response
+    response = responses[0]
+    current = response.Current()
+
+    current_relative_humidity_2m = current.Variables(0).Value()
+    current_apparent_temperature = current.Variables(1).Value()
+    current_rain = current.Variables(2).Value()
+    current_showers = current.Variables(3).Value()
+    current_snowfall = current.Variables(4).Value()
+    current_wind_speed_10m = current.Variables(5).Value()
+    current_wind_gusts_10m = current.Variables(6).Value()
+
+    # Get the current system time in HH:mm format
+    current_system_time = datetime.now().strftime("%H:%M")
+
+    # Format the current weather data into a string
+    weather_string = (
+        f"Time: {current_system_time}, "
+        f"Apparent Temperature: {round(current_apparent_temperature, 1)} {temperature_unit_}, "
+        f"Relative Humidity: {round(current_relative_humidity_2m, 1)}%, "
+        f"Rain: {round(current_rain, 1)} {precipitation_unit_}, "
+        f"Showers: {round(current_showers, 1)} {precipitation_unit_}, "
+        f"Snowfall: {round(current_snowfall, 1)} {precipitation_unit_}, "
+        f"Wind Speed: {round(current_wind_speed_10m, 1)} {wind_speed_unit_}, "
+        f"Wind Gusts: {round(current_wind_gusts_10m, 1)} {wind_speed_unit_}"
+    )
+    # Example return: Time: 00:32, Apparent Temperature: 6.0 celsius, Relative Humidity: 60.0%, Rain: 0.0 mm, Showers: 0.0 mm, Snowfall: 0.0 mm, Wind Speed: 1.4 ms, Wind Gusts: 4.9 ms
+    return weather_string
 
 def search_location(query):
     """
