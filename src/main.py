@@ -11,6 +11,7 @@ import pandas as pd
 from tkcalendar import DateEntry
 import threading
 import time
+import random
 color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "magenta", "lime", "pink", "teal", "lavender", "brown", "beige", "maroon", "mint", "olive", "coral", "navy", "grey"]
 
 def create_menu_bar(root):
@@ -23,7 +24,7 @@ def create_menu_bar(root):
     menubar.add_command(label="Your Locations", command=lambda: settings_locations_window(root))
 
     # Other Settings
-    menubar.add_command(label="Other Settings", command=lambda: open_sample_window("Other Settings"))
+    menubar.add_command(label="Other Settings", command=lambda: settings_misc_window(root))
 
     # Info Menu
     info_menu = tk.Menu(menubar, tearoff=0)
@@ -38,13 +39,18 @@ def create_menu_bar(root):
     root.config(menu=menubar)
 
 
-def open_sample_window(title):
-    window = tk.Toplevel()
-    window.title(title)
-    frame = ttk.Frame(window, padding="10")
+def settings_misc_window(root):
+    def on_save_and_close():
+        settings_window.destroy()
+    settings_window = tk.Toplevel()
+    settings_window.title("Units of Measurement")
+    settings_window.protocol("WM_DELETE_WINDOW", on_save_and_close)
+    frame = ttk.Frame(settings_window, padding="10")
     frame.pack(fill='both', expand=True)
-    sample_text = ttk.Label(frame, text=f"Work in progress")
+    sample_text = ttk.Label(frame, text="Work in progress")
     sample_text.pack()
+    settings_window.transient(root)
+    settings_window.grab_set()
 
 
 def settings_units_window(root):
@@ -354,6 +360,9 @@ def open_history_tab(master):
                                              stored_locations_listbox.locations])
     location_combobox.grid(column=1, row=0, padx=5, pady=5)
 
+    if stored_locations_listbox.locations:
+        location_combobox.current(0)  # Select the first location by default
+
     # Date selectors with DateEntry widgets from tkcalendar
     ttk.Label(frame, text="Start Date").grid(column=0, row=1, padx=5, pady=5)
     start_date_var = tk.StringVar(value="2024-01-01")
@@ -565,6 +574,9 @@ def open_forecast_tab(master):
                                      values=[f"{loc['name']}, {loc['country']}" for loc in stored_locations_listbox.locations])
     location_combobox.grid(column=1, row=0, padx=5, pady=5)
 
+    if stored_locations_listbox.locations:
+        location_combobox.current(0)  # Select the first location by default
+
     # Checkboxes for data selection
     temperature_2m_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text="Temperature", variable=temperature_2m_var).grid(column=2, row=0, padx=5, pady=5)
@@ -696,6 +708,52 @@ def open_clothing_recommendations_tab(frame):
     recommendation_label.grid(column=0, row=3, columnspan=3, padx=5, pady=20, sticky='n')
 
 
+def display_weather_facts(frame):
+    def get_random_fact(file_path):
+        with open(file_path, 'r') as file:
+            facts = file.readlines()
+        return random.choice(facts).strip().replace('\\n', '\n')
+
+    def get_fact_and_title(file_path):
+        fact = get_random_fact(file_path)
+        title, fact = fact.split('|', 1)
+        return title.strip().replace('\\n', '\n'), fact.strip().replace('\\n', '\n')
+
+    def update_button_text(button, file_path, get_title=False):
+        if get_title:
+            title, fact = get_fact_and_title(file_path)
+            button.config(text=f"{title}\n\n{fact}")
+        else:
+            fact = get_random_fact(file_path)
+            button.config(text=fact)
+
+    # Create the container for the tiles
+    for i in range(2):
+        frame.columnconfigure(i, weight=1, minsize=150)
+        frame.rowconfigure(i+1, weight=1, minsize=100)
+
+    long_file = './fun_facts/long1_en.txt'
+    mid_file = './fun_facts/mid1_en.txt'
+    short_file1 = './fun_facts/short1_en.txt'
+    short_file2 = './fun_facts/short2_en.txt'
+
+    ttk.Label(frame, text="Weather fun facts just for you", font=("bold")).grid(column=0, row=0, padx=5, pady=5, columnspan=2)
+    # Create buttons and place them in the grid
+    long_title, long_fact = get_fact_and_title(long_file)
+    button1 = tk.Button(frame, text=f"{long_title}\n\n{long_fact}", wraplength=300, relief="ridge", command=lambda: update_button_text(button1, long_file, get_title=True), takefocus=0)
+    button1.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+
+    mid_title, mid_fact = get_fact_and_title(mid_file)
+    button2 = tk.Button(frame, text=f"{mid_title}\n\n{mid_fact}", wraplength=300, relief="ridge", command=lambda: update_button_text(button2, mid_file, get_title=True), takefocus=0)
+    button2.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
+
+    short_fact1 = get_random_fact(short_file1)
+    button3 = tk.Button(frame, text=short_fact1, wraplength=300, relief="ridge", command=lambda: update_button_text(button3, short_file1), takefocus=0)
+    button3.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
+
+    short_fact2 = get_random_fact(short_file2)
+    button4 = tk.Button(frame, text=short_fact2, wraplength=300, relief="ridge", command=lambda: update_button_text(button4, short_file2), takefocus=0)
+    button4.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
 def create_tabs(root):
     global history_frame, forecast_frame
     notebook = ttk.Notebook(root)
@@ -723,7 +781,7 @@ def create_tabs(root):
 
     # Fun fact Tab
     fun_fact_frame = ttk.Frame(notebook, padding="10")
-    ttk.Label(fun_fact_frame, text="Work in progress").pack()
+    display_weather_facts(fun_fact_frame)
     notebook.add(fun_fact_frame, text="Fun fact")
 
 
