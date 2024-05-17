@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from settings_manager import save_settings, load_settings, save_locations, extract_units
 from api import search_location, get_historical_weather_data, get_forecast_data, get_clothing_recommendations
+from info_windows import open_about_window, open_feedback_window, open_help_window
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.dates import DateFormatter
@@ -26,9 +27,9 @@ def create_menu_bar(root):
 
     # Info Menu
     info_menu = tk.Menu(menubar, tearoff=0)
-    info_menu.add_command(label="Help", command=lambda: open_sample_window("Help"))
-    info_menu.add_command(label="Feedback", command=lambda: open_sample_window("Feedback"))
-    info_menu.add_command(label="About", command=lambda: open_sample_window("About"))
+    info_menu.add_command(label="Help", command=lambda: open_help_window())
+    info_menu.add_command(label="Feedback", command=lambda: open_feedback_window())
+    info_menu.add_command(label="About", command=lambda: open_about_window())
     menubar.add_cascade(label="Info", menu=info_menu)
 
     # Exit
