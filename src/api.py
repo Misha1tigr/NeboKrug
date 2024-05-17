@@ -4,7 +4,7 @@ import requests_cache
 import pandas as pd
 from retry_requests import retry
 from datetime import datetime
-
+from ai_prompts import UA_prompt
 
 def setup_openmeteo_client(cache_expire_after=3600):
     """
@@ -162,6 +162,7 @@ def get_forecast_data(latitude, longitude, temperature_unit="celsius", wind_spee
     hourly_dataframe = pd.DataFrame(data=hourly_data)
     return hourly_dataframe
 
+
 def get_current_weather(latitude, longitude, temperature_unit="celsius",
                         wind_speed_unit="m/s", precipitation_unit="mm"):
     """
@@ -182,7 +183,7 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
         temperature_unit, wind_speed_unit, precipitation_unit
     )
 
-    # Setup the Open-Meteo API client with cache and retry on error
+    # Set up the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
     retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
     openmeteo = openmeteo_requests.Client(session=retry_session)
@@ -230,8 +231,23 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
         f"Wind Speed: {round(current_wind_speed_10m, 1)} {wind_speed_unit_}, "
         f"Wind Gusts: {round(current_wind_gusts_10m, 1)} {wind_speed_unit_}"
     )
-    # Example return: Time: 00:32, Apparent Temperature: 6.0 celsius, Relative Humidity: 60.0%, Rain: 0.0 mm, Showers: 0.0 mm, Snowfall: 0.0 mm, Wind Speed: 1.4 ms, Wind Gusts: 4.9 ms
+    # Example return: Time: 00:32, Apparent Temperature: 6.0 celsius, Relative Humidity: 60.0%, Rain: 0.0 mm,
+    # Showers: 0.0 mm, Snowfall: 0.0 mm, Wind Speed: 1.4 ms, Wind Gusts: 4.9 ms
     return weather_string
+
+
+def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius",
+                                 wind_speed_unit="m/s", precipitation_unit="mm"):
+    api_url = "http://misha1tigr.pythonanywhere.com//generate"
+    prompt_text = UA_prompt + get_current_weather(latitude, longitude, temperature_unit,
+                                                  wind_speed_unit, precipitation_unit)
+    response = requests.post(api_url, json={"prompt": prompt_text})
+
+    if response.status_code == 200:
+        return response.json()["response"]
+    else:
+        return "Помилка при завантаженні даних"
+
 
 def search_location(query):
     """

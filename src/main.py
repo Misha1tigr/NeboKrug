@@ -2,12 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from settings_manager import save_settings, load_settings, save_locations, extract_units
-from api import search_location, get_historical_weather_data, get_forecast_data
+from api import search_location, get_historical_weather_data, get_forecast_data, get_clothing_recommendations
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.dates import DateFormatter
 import pandas as pd
 from tkcalendar import DateEntry
+import threading
+import time
 color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "magenta", "lime", "pink", "teal", "lavender", "brown", "beige", "maroon", "mint", "olive", "coral", "navy", "grey"]
 
 def create_menu_bar(root):
@@ -607,6 +609,92 @@ def open_forecast_tab(master):
     forecast_slider.grid(column=1, row=4, columnspan=5, pady=5)
 
 
+def open_clothing_recommendations_tab(frame):
+    # Clear the parent frame
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    # Configure the grid
+    frame.grid_columnconfigure(0, weight=1)
+    frame.grid_columnconfigure(1, weight=1)
+    frame.grid_columnconfigure(2, weight=1)
+
+    # Add label for the frame
+    frame_label = ttk.Label(frame, text="Clothing Recommendations", font=("Helvetica", 16, "bold"))
+    frame_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='n')
+
+    def on_refresh():
+        location = location_var.get()
+        if not location:
+            messagebox.showerror("Error", "Please select a location.")
+            return
+
+        for loc in stored_locations_listbox.locations:
+            if f"{loc['name']}, {loc['country']}" == location:
+                selected_location = loc
+                break
+        else:
+            selected_location = stored_locations_listbox.locations[0]
+
+        latitude = selected_location['latitude']
+        longitude = selected_location['longitude']
+
+        # Extract units from settings
+        temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
+
+        # Start the loading animation in a separate thread
+        loading_thread = threading.Thread(target=loading_animation)
+        loading_thread.start()
+
+        # Get clothing recommendations in a separate thread
+        recommendations_thread = threading.Thread(target=get_recommendations, args=(
+        latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit))
+        recommendations_thread.start()
+
+    def get_recommendations(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit):
+        recommendations = get_clothing_recommendations(latitude, longitude, temperature_unit, wind_speed_unit,
+                                                       precipitation_unit)
+        recommendation_label.config(text=recommendations, font=("Helvetica", 12))
+        stop_loading.set()  # Signal to stop the loading animation
+
+    def loading_animation():
+        stop_loading.clear()
+        animation_symbols = ['|', '/', '-', '\\']
+        idx = 0
+        while not stop_loading.is_set():
+            loading_label.config(text=f"Loading {animation_symbols[idx % len(animation_symbols)]}")
+            idx += 1
+            time.sleep(0.1)
+        loading_label.config(text="")  # Clear the loading text once done
+
+    stop_loading = threading.Event()
+
+    # Location selection combobox
+    ttk.Label(frame, text="Location").grid(column=0, row=1, padx=5, pady=5, sticky='e')
+    location_var = tk.StringVar()
+    stored_locations_listbox = tk.Listbox(frame)
+    stored_locations_listbox.locations = load_settings().get("locations", [])
+    location_combobox = ttk.Combobox(frame, textvariable=location_var, state="readonly",
+                                     values=[f"{loc['name']}, {loc['country']}" for loc in
+                                             stored_locations_listbox.locations])
+    location_combobox.grid(column=1, row=1, padx=5, pady=5, sticky='ew')
+
+    if stored_locations_listbox.locations:
+        location_combobox.current(0)  # Select the first location by default
+
+    # Refresh button
+    refresh_button = ttk.Button(frame, text="Refresh", command=on_refresh)
+    refresh_button.grid(column=2, row=1, padx=5, pady=5, sticky='w')
+
+    # Label to display the loading animation
+    loading_label = ttk.Label(frame, text="", font=("Helvetica", 12))
+    loading_label.grid(column=0, row=10, columnspan=3, padx=5, pady=5, sticky='s')
+
+    # Label to display the clothing recommendations
+    recommendation_label = ttk.Label(frame, text="", wraplength=400, justify="center")
+    recommendation_label.grid(column=0, row=3, columnspan=3, padx=5, pady=20, sticky='n')
+
+
 def create_tabs(root):
     global history_frame, forecast_frame
     notebook = ttk.Notebook(root)
@@ -619,7 +707,7 @@ def create_tabs(root):
 
     # Forecast AI Tab
     forecast_ai_frame = ttk.Frame(notebook, padding="10")
-    ttk.Label(forecast_ai_frame, text="Work in progress").pack()
+    open_clothing_recommendations_tab(forecast_ai_frame)
     notebook.add(forecast_ai_frame, text="Forecast AI")
 
     # History Tab
