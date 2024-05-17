@@ -236,6 +236,71 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
     return weather_string
 
 
+def get_history_of_date(latitude, longitude, temperature_unit="celsius", wind_speed_unit="m/s", precipitation_unit="mm"):
+    temperature_unit_, wind_speed_unit_, precipitation_unit_ = convert_units(
+        temperature_unit, wind_speed_unit, precipitation_unit
+    )
+
+    openmeteo = setup_openmeteo_client()
+
+    # Fetch current weather data
+    current_url = "https://api.open-meteo.com/v1/forecast"
+    current_params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "daily": ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max"],
+        "temperature_unit": temperature_unit_,
+        "wind_speed_unit": wind_speed_unit_,
+        "precipitation_unit": precipitation_unit_,
+        "timezone": "auto"
+    }
+
+    current_responses = openmeteo.weather_api(current_url, params=current_params)
+    current_response = current_responses[0]
+    current_daily = current_response.Daily()
+
+    today_data = {
+        "date": [pd.to_datetime(current_daily.Time(), unit="s", utc=True)],
+        "temperature_2m_max": [current_daily.Variables(0).ValuesAsNumpy()[0]],
+        "temperature_2m_min": [current_daily.Variables(1).ValuesAsNumpy()[0]],
+        "precipitation_sum": [current_daily.Variables(2).ValuesAsNumpy()[0]],
+        "wind_speed_10m_max": [current_daily.Variables(3).ValuesAsNumpy()[0]]
+    }
+    today_dataframe = pd.DataFrame(data=today_data)
+
+    # Fetch historical weather data
+    historical_url = "https://archive-api.open-meteo.com/v1/archive"
+    today = datetime.now()
+    historical_data = []
+
+    for year in range(1945, today.year):
+        date_str = today.replace(year=year).strftime('%Y-%m-%d')
+        historical_params = {
+            "latitude": latitude,
+            "longitude": longitude,
+            "start_date": date_str,
+            "end_date": date_str,
+            "daily": ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max"],
+            "temperature_unit": temperature_unit_,
+            "wind_speed_unit": wind_speed_unit_,
+            "precipitation_unit": precipitation_unit_,
+            "timezone": "auto"
+        }
+        historical_responses = openmeteo.weather_api(historical_url, params=historical_params)
+        historical_response = historical_responses[0]
+        historical_daily = historical_response.Daily()
+
+        historical_data.append({
+            "date": pd.to_datetime(historical_daily.Time(), unit="s", utc=True),
+            "temperature_2m_max": historical_daily.Variables(0).ValuesAsNumpy()[0],
+            "temperature_2m_min": historical_daily.Variables(1).ValuesAsNumpy()[0],
+            "precipitation_sum": historical_daily.Variables(2).ValuesAsNumpy()[0],
+            "wind_speed_10m_max": historical_daily.Variables(3).ValuesAsNumpy()[0]
+        })
+
+    historical_dataframe = pd.DataFrame(data=historical_data)
+    return today_dataframe, historical_dataframe
+
 def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius",
                                  wind_speed_unit="m/s", precipitation_unit="mm"):
     api_url = "http://misha1tigr.pythonanywhere.com//generate"

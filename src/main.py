@@ -139,9 +139,10 @@ def settings_locations_window(root):
 
     def on_save_and_close():
         locations = stored_locations_listbox.locations
-        save_locations(locations)  # Save the locations to the JSON file
+        save_locations(locations)
         open_history_tab(history_frame)
         open_forecast_tab(forecast_frame)
+        open_clothing_recommendations_tab(forecast_ai_frame)
         locations_window.destroy()
 
     locations = load_settings().get("locations", [])  # Load locations from the JSON file
@@ -755,7 +756,7 @@ def display_weather_facts(frame):
     button4 = tk.Button(frame, text=short_fact2, wraplength=300, relief="ridge", command=lambda: update_button_text(button4, short_file2), takefocus=0)
     button4.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
 def create_tabs(root):
-    global history_frame, forecast_frame
+    global history_frame, forecast_frame, forecast_ai_frame
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
 
