@@ -6,6 +6,7 @@ from retry_requests import retry
 from datetime import datetime
 from ai_prompts import UA_prompt
 
+
 def setup_openmeteo_client(cache_expire_after=3600):
     """
     Sets up the Open-Meteo API client with cache and retry on error.
@@ -236,7 +237,8 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
     return weather_string
 
 
-def get_history_of_date(latitude, longitude, temperature_unit="celsius", wind_speed_unit="m/s", precipitation_unit="mm"):
+def get_history_of_date(latitude, longitude, temperature_unit="celsius", wind_speed_unit="m/s",
+                        precipitation_unit="mm"):
     temperature_unit_, wind_speed_unit_, precipitation_unit_ = convert_units(
         temperature_unit, wind_speed_unit, precipitation_unit
     )
@@ -300,6 +302,81 @@ def get_history_of_date(latitude, longitude, temperature_unit="celsius", wind_sp
 
     historical_dataframe = pd.DataFrame(data=historical_data)
     return today_dataframe, historical_dataframe
+
+
+def compare_todays_data(today_df, historical_df):
+    report = []
+
+    # Max and Min Temperature Analysis
+    today_max_temp = today_df['temperature_2m_max'].values[0]
+    today_min_temp = today_df['temperature_2m_min'].values[0]
+    historical_sorted_by_max_temp = historical_df.sort_values(by='temperature_2m_max', ascending=False)
+    historical_sorted_by_min_temp = historical_df.sort_values(by='temperature_2m_min', ascending=True)
+
+    hottest_year = historical_sorted_by_max_temp.iloc[0]['date'].year
+    hottest_temp = historical_sorted_by_max_temp.iloc[0]['temperature_2m_max']
+    coldest_year = historical_sorted_by_min_temp.iloc[0]['date'].year
+    coldest_temp = historical_sorted_by_min_temp.iloc[0]['temperature_2m_min']
+
+    max_temp_rank = (historical_sorted_by_max_temp['temperature_2m_max'] >= today_max_temp).sum()
+    min_temp_rank = (historical_sorted_by_min_temp['temperature_2m_min'] <= today_min_temp).sum()
+    # This is ok, because sum of bool is effectively sum of 1s and 0s
+
+    if max_temp_rank == 1:
+        temp_rank_text = f"Today is the hottest day on this date since 1945"
+    elif min_temp_rank == 1:
+        temp_rank_text = f"Today is the coldest day on this date since 1945"
+    else:
+        if max_temp_rank >= min_temp_rank:
+            temp_rank_text = f"Today is the {max_temp_rank}-th hottest day on this date since 1945"
+        else:
+            temp_rank_text = f"Today is the {min_temp_rank}-th coldest day on this date since 1945"
+
+    report.append(
+        f"{temp_rank_text}, with the hottest being in {hottest_year} with a max temperature of {hottest_temp:.1f}°C, "
+        f"and the coldest being in {coldest_year} with a min temperature of {coldest_temp:.1f}°C."
+    )
+
+    # Precipitation Analysis
+    today_precipitation = today_df['precipitation_sum'].values[0]
+    if today_precipitation == 0:
+        last_rain_year = historical_df[historical_df['precipitation_sum'] > 0].iloc[-1]['date'].year
+        last_rain_amount = historical_df[historical_df['precipitation_sum'] > 0].iloc[-1]['precipitation_sum']
+        report.append(f"Last rain on this date was in {last_rain_year} with {last_rain_amount:.1f} mm of rain.")
+    else:
+        max_precipitation = historical_df['precipitation_sum'].max()
+        if today_precipitation > max_precipitation:
+            report.append(
+                f"Today has the highest precipitation on this date since 1945 with {today_precipitation:.1f} mm of rain.")
+        else:
+            wettest_year = historical_df.loc[historical_df['precipitation_sum'].idxmax(), 'date'].year
+            report.append(
+                f"Today has {today_precipitation:.1f} mm of rain. The wettest day on this date since 1945 was in {wettest_year} with {max_precipitation:.1f} mm of rain.")
+
+    # Wind Speed Analysis
+    today_wind_speed = today_df['wind_speed_10m_max'].values[0]
+    historical_sorted_by_wind_speed = historical_df.sort_values(by='wind_speed_10m_max', ascending=False)
+    historical_sorted_by_calm_wind = historical_df.sort_values(by='wind_speed_10m_max', ascending=True)
+
+    max_wind_speed_year = historical_sorted_by_wind_speed.iloc[0]['date'].year
+    max_wind_speed = historical_sorted_by_wind_speed.iloc[0]['wind_speed_10m_max']
+    calmest_wind_year = historical_sorted_by_calm_wind.iloc[0]['date'].year
+    calmest_wind_speed = historical_sorted_by_calm_wind.iloc[0]['wind_speed_10m_max']
+
+    wind_speed_rank = (historical_sorted_by_wind_speed['wind_speed_10m_max'] >= today_wind_speed).sum()
+
+    if wind_speed_rank == 1:
+        wind_speed_text = f"Today has the highest wind speed on this date since 1945"
+    else:
+        wind_speed_text = f"Today is the {wind_speed_rank}-th windiest day on this date since 1945"
+
+
+    report.append(
+        f"{wind_speed_text}, with the highest wind speed being in {max_wind_speed_year} with {max_wind_speed:.1f} m/s, and the calmest in {calmest_wind_year} with {calmest_wind_speed:.1f} m/s."
+    )
+
+    return "\n\n".join(report)
+
 
 def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius",
                                  wind_speed_unit="m/s", precipitation_unit="mm"):

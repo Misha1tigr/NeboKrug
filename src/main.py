@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from settings_manager import save_settings, load_settings, save_locations, extract_units
-from api import search_location, get_historical_weather_data, get_forecast_data, get_clothing_recommendations
+from api import search_location, get_historical_weather_data, get_forecast_data, get_clothing_recommendations, \
+    compare_todays_data, get_history_of_date
 from info_windows import open_about_window, open_feedback_window, open_help_window
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -12,7 +13,10 @@ from tkcalendar import DateEntry
 import threading
 import time
 import random
-color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "magenta", "lime", "pink", "teal", "lavender", "brown", "beige", "maroon", "mint", "olive", "coral", "navy", "grey"]
+
+color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "magenta", "lime", "pink", "teal",
+               "lavender", "brown", "beige", "maroon", "mint", "olive", "coral", "navy", "grey"]
+
 
 def create_menu_bar(root):
     menubar = tk.Menu(root)
@@ -42,6 +46,7 @@ def create_menu_bar(root):
 def settings_misc_window(root):
     def on_save_and_close():
         settings_window.destroy()
+
     settings_window = tk.Toplevel()
     settings_window.title("Units of Measurement")
     settings_window.protocol("WM_DELETE_WINDOW", on_save_and_close)
@@ -143,6 +148,7 @@ def settings_locations_window(root):
         open_history_tab(history_frame)
         open_forecast_tab(forecast_frame)
         open_clothing_recommendations_tab(forecast_ai_frame)
+        open_day_in_history_tab(this_day_history_frame)
         locations_window.destroy()
 
     locations = load_settings().get("locations", [])  # Load locations from the JSON file
@@ -408,7 +414,6 @@ def open_history_tab(master):
     canvas.draw()
 
 
-
 def open_forecast_tab(master):
     def on_refresh(fetch_new_data=True):
         location = location_var.get()
@@ -432,7 +437,8 @@ def open_forecast_tab(master):
         # Get forecast weather data with units only once
         if fetch_new_data:
             global forecast_data  # Store the forecast data globally to avoid repeated API calls
-            forecast_data = get_forecast_data(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit)
+            forecast_data = get_forecast_data(latitude, longitude, temperature_unit, wind_speed_unit,
+                                              precipitation_unit)
         else:
             try:
                 # noinspection PyUnboundLocalVariable
@@ -498,45 +504,53 @@ def open_forecast_tab(master):
         show_primary_axis = False
         for col in selected_columns:
             if col == 'temperature_2m':
-                line, = ax.plot(data['date'], data['temperature_2m'], label='Temperature', color=color_cycle[color_index])
+                line, = ax.plot(data['date'], data['temperature_2m'], label='Temperature',
+                                color=color_cycle[color_index])
                 legend_handles.append(line)
                 show_primary_axis = True
                 ax.set_ylabel(f'Temperature ({temperature_unit})')
                 axis_position -= 60
             elif col == 'relative_humidity_2m':
                 rh_ax = get_or_create_axis('Relative Humidity', axis_position, 'left')
-                line, = rh_ax.plot(data['date'], data['relative_humidity_2m'], label='Relative Humidity', color=color_cycle[color_index])
+                line, = rh_ax.plot(data['date'], data['relative_humidity_2m'], label='Relative Humidity',
+                                   color=color_cycle[color_index])
                 legend_handles.append(line)
                 rh_ax.set_ylabel('Relative Humidity (%)')
             elif col == 'apparent_temperature':
-                line, = ax.plot(data['date'], data['apparent_temperature'], label='Apparent Temperature', color=color_cycle[color_index])
+                line, = ax.plot(data['date'], data['apparent_temperature'], label='Apparent Temperature',
+                                color=color_cycle[color_index])
                 legend_handles.append(line)
                 show_primary_axis = True
                 ax.set_ylabel(f'Apparent Temperature ({temperature_unit})')
                 axis_position -= 60
             elif col == 'precipitation_probability':
                 pp_ax = get_or_create_axis('Precipitation Probability', axis_position, 'right')
-                line, = pp_ax.plot(data['date'], data['precipitation_probability'], label='Precipitation Probability', color=color_cycle[color_index])
+                line, = pp_ax.plot(data['date'], data['precipitation_probability'], label='Precipitation Probability',
+                                   color=color_cycle[color_index])
                 legend_handles.append(line)
                 pp_ax.set_ylabel('Precipitation Probability (%)')
             elif col == 'precipitation':
                 precip_ax = get_or_create_axis('Precipitation', axis_position, 'right')
-                bar = precip_ax.bar(data['date'], data['precipitation'], label='Precipitation', color=color_cycle[color_index], alpha=0.5, width=0.13)
+                bar = precip_ax.bar(data['date'], data['precipitation'], label='Precipitation',
+                                    color=color_cycle[color_index], alpha=0.5, width=0.13)
                 legend_handles.append(bar)
                 precip_ax.set_ylabel(f'Precipitation ({precipitation_unit})')
             elif col == 'surface_pressure':
                 sp_ax = get_or_create_axis('Surface Pressure', axis_position, 'right')
-                line, = sp_ax.plot(data['date'], data['surface_pressure'], label='Surface Pressure', color=color_cycle[color_index])
+                line, = sp_ax.plot(data['date'], data['surface_pressure'], label='Surface Pressure',
+                                   color=color_cycle[color_index])
                 legend_handles.append(line)
                 sp_ax.set_ylabel('Surface Pressure (hPa)')
             elif col == 'visibility':
                 vis_ax = get_or_create_axis('Visibility', axis_position, 'right')
-                line, = vis_ax.plot(data['date'], data['visibility'], label='Visibility', color=color_cycle[color_index])
+                line, = vis_ax.plot(data['date'], data['visibility'], label='Visibility',
+                                    color=color_cycle[color_index])
                 legend_handles.append(line)
                 vis_ax.set_ylabel('Visibility (m)')
             elif col == 'wind_speed_10m':
                 ws_ax = get_or_create_axis('Wind Speed', axis_position, 'right')
-                line, = ws_ax.plot(data['date'], data['wind_speed_10m'], label='Wind Speed', color=color_cycle[color_index])
+                line, = ws_ax.plot(data['date'], data['wind_speed_10m'], label='Wind Speed',
+                                   color=color_cycle[color_index])
                 legend_handles.append(line)
                 ws_ax.set_ylabel(f'Wind Speed ({wind_speed_unit})')
             elif col == 'uv_index':
@@ -572,7 +586,8 @@ def open_forecast_tab(master):
     stored_locations_listbox = tk.Listbox(frame)
     stored_locations_listbox.locations = load_settings().get("locations", [])
     location_combobox = ttk.Combobox(frame, textvariable=location_var, state="readonly",
-                                     values=[f"{loc['name']}, {loc['country']}" for loc in stored_locations_listbox.locations])
+                                     values=[f"{loc['name']}, {loc['country']}" for loc in
+                                             stored_locations_listbox.locations])
     location_combobox.grid(column=1, row=0, padx=5, pady=5)
 
     if stored_locations_listbox.locations:
@@ -583,13 +598,17 @@ def open_forecast_tab(master):
     ttk.Checkbutton(frame, text="Temperature", variable=temperature_2m_var).grid(column=2, row=0, padx=5, pady=5)
 
     relative_humidity_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Relative Humidity", variable=relative_humidity_var).grid(column=2, row=1, padx=5, pady=5)
+    ttk.Checkbutton(frame, text="Relative Humidity", variable=relative_humidity_var).grid(column=2, row=1, padx=5,
+                                                                                          pady=5)
 
     apparent_temperature_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Apparent Temperature", variable=apparent_temperature_var).grid(column=2, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text="Apparent Temperature", variable=apparent_temperature_var).grid(column=2, row=2, padx=5,
+                                                                                                pady=5)
 
     precipitation_probability_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Precipitation Probability", variable=precipitation_probability_var).grid(column=3, row=0, padx=5, pady=5)
+    ttk.Checkbutton(frame, text="Precipitation Probability", variable=precipitation_probability_var).grid(column=3,
+                                                                                                          row=0, padx=5,
+                                                                                                          pady=5)
 
     precipitation_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text="Precipitation", variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
@@ -619,7 +638,8 @@ def open_forecast_tab(master):
 
     # Slider for adjusting forecast days
     ttk.Label(frame, text="Forecast Days").grid(column=0, row=4, padx=5, pady=5)
-    forecast_slider = ttk.Scale(frame, from_=1, to=14, value=14, orient='horizontal', length=400, command=lambda a: on_refresh(fetch_new_data=False))
+    forecast_slider = ttk.Scale(frame, from_=1, to=14, value=14, orient='horizontal', length=400,
+                                command=lambda a: on_refresh(fetch_new_data=False))
     forecast_slider.grid(column=1, row=4, columnspan=5, pady=5)
 
 
@@ -662,7 +682,7 @@ def open_clothing_recommendations_tab(frame):
 
         # Get clothing recommendations in a separate thread
         recommendations_thread = threading.Thread(target=get_recommendations, args=(
-        latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit))
+            latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit))
         recommendations_thread.start()
 
     def get_recommendations(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit):
@@ -673,11 +693,11 @@ def open_clothing_recommendations_tab(frame):
 
     def loading_animation():
         stop_loading.clear()
-        animation_symbols = ['|', '/', '-', '\\']
-        idx = 0
+        animation_symbols = ['|', '/', '–', '\\']
+        i = 0
         while not stop_loading.is_set():
-            loading_label.config(text=f"Loading {animation_symbols[idx % len(animation_symbols)]}")
-            idx += 1
+            loading_label.config(text=f"Loading {animation_symbols[i % len(animation_symbols)]}")
+            i += 1
             time.sleep(0.1)
         loading_label.config(text="")  # Clear the loading text once done
 
@@ -731,32 +751,127 @@ def display_weather_facts(frame):
     # Create the container for the tiles
     for i in range(2):
         frame.columnconfigure(i, weight=1, minsize=150)
-        frame.rowconfigure(i+1, weight=1, minsize=100)
+        frame.rowconfigure(i + 1, weight=1, minsize=100)
 
     long_file = './fun_facts/long1_en.txt'
     mid_file = './fun_facts/mid1_en.txt'
     short_file1 = './fun_facts/short1_en.txt'
     short_file2 = './fun_facts/short2_en.txt'
 
-    ttk.Label(frame, text="Weather fun facts just for you", font=("bold")).grid(column=0, row=0, padx=5, pady=5, columnspan=2)
+    ttk.Label(frame, text="Weather fun facts just for you", font=("bold")).grid(column=0, row=0, padx=5, pady=5,
+                                                                                columnspan=2)
     # Create buttons and place them in the grid
     long_title, long_fact = get_fact_and_title(long_file)
-    button1 = tk.Button(frame, text=f"{long_title}\n\n{long_fact}", wraplength=300, relief="ridge", command=lambda: update_button_text(button1, long_file, get_title=True), takefocus=0)
+    button1 = tk.Button(frame, text=f"{long_title}\n\n{long_fact}", wraplength=300, relief="ridge",
+                        command=lambda: update_button_text(button1, long_file, get_title=True), takefocus=0)
     button1.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
 
     mid_title, mid_fact = get_fact_and_title(mid_file)
-    button2 = tk.Button(frame, text=f"{mid_title}\n\n{mid_fact}", wraplength=300, relief="ridge", command=lambda: update_button_text(button2, mid_file, get_title=True), takefocus=0)
+    button2 = tk.Button(frame, text=f"{mid_title}\n\n{mid_fact}", wraplength=300, relief="ridge",
+                        command=lambda: update_button_text(button2, mid_file, get_title=True), takefocus=0)
     button2.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
 
     short_fact1 = get_random_fact(short_file1)
-    button3 = tk.Button(frame, text=short_fact1, wraplength=300, relief="ridge", command=lambda: update_button_text(button3, short_file1), takefocus=0)
+    button3 = tk.Button(frame, text=short_fact1, wraplength=300, relief="ridge",
+                        command=lambda: update_button_text(button3, short_file1), takefocus=0)
     button3.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
 
     short_fact2 = get_random_fact(short_file2)
-    button4 = tk.Button(frame, text=short_fact2, wraplength=300, relief="ridge", command=lambda: update_button_text(button4, short_file2), takefocus=0)
+    button4 = tk.Button(frame, text=short_fact2, wraplength=300, relief="ridge",
+                        command=lambda: update_button_text(button4, short_file2), takefocus=0)
     button4.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
+
+
+def open_day_in_history_tab(frame):
+    # Clear the parent frame
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    # Configure the grid
+    frame.grid_columnconfigure(0, weight=1)
+    frame.grid_columnconfigure(1, weight=1)
+    frame.grid_columnconfigure(2, weight=1)
+
+    # Add label for the frame
+    frame_label = ttk.Label(frame, text="What is today like, compared to previous years?",
+                            font=("Helvetica", 16, "bold"))
+    frame_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='n')
+
+    def on_refresh():
+        location = location_var.get()
+        if not location:
+            messagebox.showerror("Error", "Please select a location.")
+            return
+
+        for loc in stored_locations_listbox.locations:
+            if f"{loc['name']}, {loc['country']}" == location:
+                selected_location = loc
+                break
+        else:
+            selected_location = stored_locations_listbox.locations[0]
+
+        latitude = selected_location['latitude']
+        longitude = selected_location['longitude']
+
+        # Extract units from settings
+        temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
+
+        # Start the loading animation in a separate thread
+        loading_thread = threading.Thread(target=loading_animation)
+        loading_thread.start()
+
+        # Get clothing recommendations in a separate thread
+        recommendations_thread = threading.Thread(target=load_data, args=(
+            latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit))
+        recommendations_thread.start()
+
+    def load_data(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit):
+        data_today, data_before = get_history_of_date(latitude, longitude, temperature_unit, wind_speed_unit,
+                                                      precipitation_unit)
+        text_analisys = compare_todays_data(data_today, data_before)
+        recommendation_label.config(text=text_analisys, font=("Helvetica", 12))
+        stop_loading.set()  # Signal to stop the loading animation
+
+    def loading_animation():
+        stop_loading.clear()
+        animation_symbols = ['|', '/', '–', '\\']
+        i = 0
+        while not stop_loading.is_set():
+            loading_label.config(text=f"Loading {animation_symbols[i % len(animation_symbols)]}")
+            i += 1
+            time.sleep(0.1)
+        loading_label.config(text="")  # Clear the loading text once done
+
+    stop_loading = threading.Event()
+
+    # Location selection combobox
+    ttk.Label(frame, text="Location").grid(column=0, row=1, padx=5, pady=5, sticky='e')
+    location_var = tk.StringVar()
+    stored_locations_listbox = tk.Listbox(frame)
+    stored_locations_listbox.locations = load_settings().get("locations", [])
+    location_combobox = ttk.Combobox(frame, textvariable=location_var, state="readonly",
+                                     values=[f"{loc['name']}, {loc['country']}" for loc in
+                                             stored_locations_listbox.locations])
+    location_combobox.grid(column=1, row=1, padx=5, pady=5, sticky='ew')
+
+    if stored_locations_listbox.locations:
+        location_combobox.current(0)  # Select the first location by default
+
+    # Refresh button
+    refresh_button = ttk.Button(frame, text="Refresh", command=on_refresh)
+    refresh_button.grid(column=2, row=1, padx=5, pady=5, sticky='w')
+
+    # Label to display the loading animation
+    loading_label = ttk.Label(frame, text="", font=("Helvetica", 12))
+    loading_label.grid(column=0, row=10, columnspan=3, padx=5, pady=5, sticky='s')
+
+    # Label to display the clothing recommendations
+    recommendation_label = ttk.Label(frame, text="", wraplength=400, justify="center")
+    recommendation_label.grid(column=0, row=3, columnspan=3, padx=5, pady=20, sticky='n')
+
+
 def create_tabs(root):
-    global history_frame, forecast_frame, forecast_ai_frame
+    global history_frame, forecast_frame, forecast_ai_frame, this_day_history_frame
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
 
@@ -777,7 +892,7 @@ def create_tabs(root):
 
     # This day in history Tab
     this_day_history_frame = ttk.Frame(notebook, padding="10")
-    ttk.Label(this_day_history_frame, text="Work in progress").pack()
+    open_day_in_history_tab(this_day_history_frame)
     notebook.add(this_day_history_frame, text="This day in history")
 
     # Fun fact Tab
