@@ -789,8 +789,8 @@ def display_weather_facts(frame):
     short_file1 = './fun_facts/short1_en.txt'
     short_file2 = './fun_facts/short2_en.txt'
 
-    ttk.Label(frame, text="Weather fun facts just for you", font=("bold")).grid(column=0, row=0, padx=5, pady=5,
-                                                                                columnspan=2)
+    ttk.Label(frame, text="Weather fun facts just for you", font="bold").grid(column=0, row=0, padx=5, pady=5,
+                                                                              columnspan=2)
     # Create buttons and place them in the grid
     long_title, long_fact = get_fact_and_title(long_file)
     button1 = tk.Button(frame, text=f"{long_title}\n\n{long_fact}", wraplength=300, relief="ridge",

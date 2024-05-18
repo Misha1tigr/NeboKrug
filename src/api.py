@@ -408,7 +408,7 @@ def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius"
     Returns:
         str: Clothing recommendations.
     """
-    api_url = "http://misha1tigr.pythonanywhere.com/generate"
+    api_url = "https://misha1tigr.pythonanywhere.com/generate"
     current_weather = get_current_weather(latitude, longitude, temperature_unit,
                                           wind_speed_unit, precipitation_unit)
     prompt_text = UA_prompt + current_weather
