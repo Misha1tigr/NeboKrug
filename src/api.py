@@ -4,8 +4,8 @@ import requests_cache
 import pandas as pd
 from retry_requests import retry
 from datetime import datetime
-from ai_prompts import UA_prompt
-
+from ai_prompts import UA_prompt, EN_prompt
+from settings_manager import load_settings
 
 def setup_openmeteo_client(cache_expire_after=3600):
     """
@@ -411,7 +411,12 @@ def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius"
     api_url = "https://misha1tigr.pythonanywhere.com/generate"
     current_weather = get_current_weather(latitude, longitude, temperature_unit,
                                           wind_speed_unit, precipitation_unit)
-    prompt_text = UA_prompt + current_weather
+    selected_locale = load_settings().get("locale", "en")
+    if selected_locale == "en":
+        prompt_text = EN_prompt
+    else:
+        prompt_text = UA_prompt
+    prompt_text += current_weather
     response = requests.post(api_url, json={"prompt": prompt_text})
 
     if response.status_code == 200:

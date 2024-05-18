@@ -1,0 +1,81 @@
+# Translations for NeboKrug app.
+# Copyright (C) 2024 Myself
+# Korbut Mykhailo <korbutmykhailo@gmail.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2024-05-18 22:29+0300\n"
+"PO-Revision-Date: 2024-05-18 22:29+0300\n"
+"Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
+"Language-Team: N/A <email@email.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: C:/NeboKrug/src/settings_windows.py:28
+msgid "Miscellaneous Settings"
+msgstr "Інші налаштування"
+
+#: C:/NeboKrug/src/settings_windows.py:35
+msgid "App Language"
+msgstr "Мова додатку"
+
+#: C:/NeboKrug/src/settings_windows.py:44
+msgid "Save & Restart"
+msgstr "Зберегти та перезапустити"
+
+#: C:/NeboKrug/src/settings_windows.py:68
+msgid "Units of Measurement"
+msgstr "Одиниці виміру"
+
+#: C:/NeboKrug/src/settings_windows.py:75
+msgid "Temperature Units"
+msgstr "Одиниці температури"
+
+#: C:/NeboKrug/src/settings_windows.py:84
+msgid "Wind Speed Units"
+msgstr "Одиниці швидкості вітру"
+
+#: C:/NeboKrug/src/settings_windows.py:93
+msgid "Precipitation Units"
+msgstr "Одиниці виміру опадів"
+
+#: C:/NeboKrug/src/settings_windows.py:102
+#: C:/NeboKrug/src/settings_windows.py:197
+msgid "Save & Close"
+msgstr "Зберегти та закрити"
+
+#: C:/NeboKrug/src/settings_windows.py:153
+msgid "Your Locations"
+msgstr "Ваші локації"
+
+#: C:/NeboKrug/src/settings_windows.py:158
+msgid "Your saved locations"
+msgstr "Ваші збережені місця"
+
+#: C:/NeboKrug/src/settings_windows.py:160
+msgid "Stored Locations"
+msgstr "Збережені місця"
+
+#: C:/NeboKrug/src/settings_windows.py:175
+msgid "Add"
+msgstr "Додати"
+
+#: C:/NeboKrug/src/settings_windows.py:178
+msgid "Delete"
+msgstr "Видалити"
+
+#: C:/NeboKrug/src/settings_windows.py:182
+msgid "Search Location"
+msgstr "Пошук населеного пункту (лише англійською)"
+
+#: C:/NeboKrug/src/settings_windows.py:187
+msgid "Search"
+msgstr "Пошук"
+
+#: C:/NeboKrug/src/settings_windows.py:191
+msgid "Search Results"
+msgstr "Результати пошуку"

@@ -1,0 +1,80 @@
+# Translations for NeboKrug app.
+# Copyright (C) 2024 Myself
+# Korbut Mykhailo <korbutmykhailo@gmail.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2024-05-18 22:29+0300\n"
+"PO-Revision-Date: 2024-05-18 22:29+0300\n"
+"Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
+"Language-Team: N/A <email@email.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+#: C:/NeboKrug/src/settings_windows.py:28
+msgid "Miscellaneous Settings"
+msgstr "Miscellaneous Settings"
+
+#: C:/NeboKrug/src/settings_windows.py:35
+msgid "App Language"
+msgstr "App Language"
+
+#: C:/NeboKrug/src/settings_windows.py:44
+msgid "Save & Restart"
+msgstr "Save & Restart"
+
+#: C:/NeboKrug/src/settings_windows.py:68
+msgid "Units of Measurement"
+msgstr "Units of Measurement"
+
+#: C:/NeboKrug/src/settings_windows.py:75
+msgid "Temperature Units"
+msgstr "Temperature Units"
+
+#: C:/NeboKrug/src/settings_windows.py:84
+msgid "Wind Speed Units"
+msgstr "Wind Speed Units"
+
+#: C:/NeboKrug/src/settings_windows.py:93
+msgid "Precipitation Units"
+msgstr "Precipitation Units"
+
+#: C:/NeboKrug/src/settings_windows.py:102
+#: C:/NeboKrug/src/settings_windows.py:197
+msgid "Save & Close"
+msgstr "Save & Close"
+
+#: C:/NeboKrug/src/settings_windows.py:153
+msgid "Your Locations"
+msgstr "Your Locations"
+
+#: C:/NeboKrug/src/settings_windows.py:158
+msgid "Your saved locations"
+msgstr "Your saved locations"
+
+#: C:/NeboKrug/src/settings_windows.py:160
+msgid "Stored Locations"
+msgstr "Stored Locations"
+
+#: C:/NeboKrug/src/settings_windows.py:175
+msgid "Add"
+msgstr "Add"
+
+#: C:/NeboKrug/src/settings_windows.py:178
+msgid "Delete"
+msgstr "Delete"
+
+#: C:/NeboKrug/src/settings_windows.py:182
+msgid "Search Location"
+msgstr "Search Location (English only)"
+
+#: C:/NeboKrug/src/settings_windows.py:187
+msgid "Search"
+msgstr "Search"
+
+#: C:/NeboKrug/src/settings_windows.py:191
+msgid "Search Results"
+msgstr "Search Results"

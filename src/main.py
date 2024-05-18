@@ -16,7 +16,7 @@ import time
 import random
 import gettext
 
-selected_locale = load_settings().get("locale", "ua")
+selected_locale = load_settings().get("locale", "en")
 text_object = gettext.translation('main', localedir='../locales', languages=[selected_locale])
 text_object.install()
 _ = text_object.gettext
@@ -249,7 +249,7 @@ def open_history_tab(master):
     ttk.Checkbutton(frame, text=_("Temperature Min"), variable=temperature_min_var).grid(column=2, row=1, padx=5, pady=5)
 
     temperature_mean_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Temperature Mean", variable=temperature_mean_var).grid(column=2, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature Mean"), variable=temperature_mean_var).grid(column=2, row=2, padx=5, pady=5)
 
     daylight_duration_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Daylight Duration"), variable=daylight_duration_var).grid(column=3, row=0, padx=5,

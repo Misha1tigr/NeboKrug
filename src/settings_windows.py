@@ -4,6 +4,12 @@ from settings_manager import save_settings, load_settings, save_locations
 from api import search_location
 import os
 import sys
+import gettext
+
+selected_locale = load_settings().get("locale", "en")
+text_object = gettext.translation('settings', localedir='../locales', languages=[selected_locale])
+text_object.install()
+_ = text_object.gettext
 
 def settings_misc_window(root):
     """
@@ -19,14 +25,14 @@ def settings_misc_window(root):
     settings = load_settings()  # Load settings from the JSON file
 
     settings_window = tk.Toplevel()
-    settings_window.title("Miscellaneous Settings")
+    settings_window.title(_("Miscellaneous Settings"))
     settings_window.protocol("WM_DELETE_WINDOW", on_save_and_close)
 
     frame = ttk.Frame(settings_window, padding="10")
     frame.pack(fill='both', expand=True)
 
     # Language Selection
-    ttk.Label(frame, text="App Language").grid(column=0, row=0, padx=5, pady=5)
+    ttk.Label(frame, text=_("App Language")).grid(column=0, row=0, padx=5, pady=5)
     language_options = ["English", "Українська"]
     language_selected_option = tk.StringVar()
     language_selected_option.set("English" if settings.get("locale", "en") == "en" else "Українська")
@@ -35,7 +41,7 @@ def settings_misc_window(root):
     language_dropdown.grid(column=1, row=0, padx=5, pady=5)
 
     # Save and Close Button
-    save_and_close_btn = ttk.Button(frame, text="Save & Restart", command=on_save_and_close)
+    save_and_close_btn = ttk.Button(frame, text=_("Save & Restart"), command=on_save_and_close)
     save_and_close_btn.grid(column=0, row=1, columnspan=2, pady=10)
 
     settings_window.transient(root)
@@ -59,14 +65,14 @@ def settings_units_window(root):
     settings = load_settings()  # Load settings from the JSON file
 
     settings_window = tk.Toplevel()
-    settings_window.title("Units of Measurement")
+    settings_window.title(_("Units of Measurement"))
     settings_window.protocol("WM_DELETE_WINDOW", on_save_and_close)
 
     frame = ttk.Frame(settings_window, padding="10")
     frame.pack(fill='both', expand=True)
 
     # Temperature Units
-    ttk.Label(frame, text="Temperature Units").grid(column=0, row=0, padx=5, pady=5)
+    ttk.Label(frame, text=_("Temperature Units")).grid(column=0, row=0, padx=5, pady=5)
     temperature_unit_options = ["Celsius °C", "Fahrenheit °F"]
     temperature_unit_selected_option = tk.StringVar()
     temperature_unit_selected_option.set(settings.get("temperature_unit", "Celsius °C"))
@@ -75,7 +81,7 @@ def settings_units_window(root):
     temperature_unit_dropdown.grid(column=1, row=0, padx=5, pady=5)
 
     # Wind Speed Units
-    ttk.Label(frame, text="Wind Speed Units").grid(column=0, row=1, padx=5, pady=5)
+    ttk.Label(frame, text=_("Wind Speed Units")).grid(column=0, row=1, padx=5, pady=5)
     windspeed_unit_options = ["Km/h", "m/s", "Mph", "Knots"]
     windspeed_unit_selected_option = tk.StringVar()
     windspeed_unit_selected_option.set(settings.get("wind_speed_unit", "Km/h"))
@@ -84,7 +90,7 @@ def settings_units_window(root):
     windspeed_unit_dropdown.grid(column=1, row=1, padx=5, pady=5)
 
     # Precipitation Units
-    ttk.Label(frame, text="Precipitation Units").grid(column=0, row=2, padx=5, pady=5)
+    ttk.Label(frame, text=_("Precipitation Units")).grid(column=0, row=2, padx=5, pady=5)
     precipitation_unit_options = ["Millimeter", "Inch"]
     precipitation_unit_selected_option = tk.StringVar()
     precipitation_unit_selected_option.set(settings.get("precipitation_unit", "Millimeter"))
@@ -93,7 +99,7 @@ def settings_units_window(root):
     precipitation_unit_dropdown.grid(column=1, row=2, padx=5, pady=5)
 
     # Save and Close Button
-    save_and_close_btn = ttk.Button(frame, text="Save & Close", command=on_save_and_close)
+    save_and_close_btn = ttk.Button(frame, text=_("Save & Close"), command=on_save_and_close)
     save_and_close_btn.grid(column=0, row=3, columnspan=2, pady=10)
 
     settings_window.transient(root)
@@ -144,14 +150,13 @@ def settings_locations_window(root, updates_to_call):
     locations = load_settings().get("locations", [])  # Load locations from the JSON file
 
     locations_window = tk.Toplevel()
-    locations_window.title("Your Locations")
+    locations_window.title(_("Your Locations"))
     locations_window.protocol("WM_DELETE_WINDOW", on_save_and_close)
 
     frame = ttk.Frame(locations_window, padding="10")
     frame.pack(fill='both', expand=True)
-    ttk.Label(frame, text="Your saved locations").grid(column=0, row=0, columnspan=2, padx=5, pady=5)
+    ttk.Label(frame, text=_("Your saved locations"), font="bold").grid(column=0, row=0, columnspan=2, padx=5, pady=5)
     # Listbox for stored locations
-    ttk.Label(frame, text="Stored Locations").grid(column=0, row=1, columnspan=2, padx=5, pady=5)
     stored_locations_listbox = tk.Listbox(frame, height=10, width=80, exportselection=False)
     stored_locations_listbox.locations = []
     for location in locations:
@@ -166,29 +171,29 @@ def settings_locations_window(root, updates_to_call):
     stored_locations_listbox.grid(column=0, row=2, columnspan=2, padx=5, pady=5)
 
     # Control buttons for locations
-    add_location_btn = ttk.Button(frame, text="Add", command=on_add_location)
+    add_location_btn = ttk.Button(frame, text=_("Add"), command=on_add_location)
     add_location_btn.grid(column=0, row=3, padx=5, pady=5)
 
-    delete_location_btn = ttk.Button(frame, text="Delete", command=on_delete_location)
+    delete_location_btn = ttk.Button(frame, text=_("Delete"), command=on_delete_location)
     delete_location_btn.grid(column=1, row=3, padx=5, pady=5)
 
     # Search field for locations
-    ttk.Label(frame, text="Search Location").grid(column=0, row=4, columnspan=2, padx=5, pady=5)
+    ttk.Label(frame, text=_("Search Location")).grid(column=0, row=4, columnspan=2, padx=5, pady=5)
     search_var = tk.StringVar()
     search_entry = ttk.Entry(frame, width=50, textvariable=search_var)
     search_entry.grid(column=0, row=5, columnspan=2, pady=5)
 
-    search_btn = ttk.Button(frame, text="Search", command=on_search)
+    search_btn = ttk.Button(frame, text=_("Search"), command=on_search)
     search_btn.grid(column=0, row=6, columnspan=2, padx=5, pady=5)
 
     # Listbox for search results
-    ttk.Label(frame, text="Search Results").grid(column=0, row=7, columnspan=2, padx=5, pady=5)
+    ttk.Label(frame, text=_("Search Results")).grid(column=0, row=7, columnspan=2, padx=5, pady=5)
     search_results_listbox = tk.Listbox(frame, height=10, width=80, exportselection=False)
     search_results_listbox.results = {}
     search_results_listbox.grid(column=0, row=8, columnspan=2, padx=5, pady=5)
 
     # Save and Close Button
-    save_and_close_btn = ttk.Button(frame, text="Save & Close", command=on_save_and_close)
+    save_and_close_btn = ttk.Button(frame, text=_("Save & Close"), command=on_save_and_close)
     save_and_close_btn.grid(column=0, row=9, columnspan=2, pady=10)
 
     locations_window.transient(root)
