@@ -9,7 +9,7 @@ from ai_prompts import UA_prompt
 
 def setup_openmeteo_client(cache_expire_after=3600):
     """
-    Sets up the Open-Meteo API client with cache and retry on error.
+    Sets up the Open-Meteo API client with caching and retry on errors.
 
     Args:
         cache_expire_after (int, optional): Cache expiration time in seconds. Defaults to 3600 seconds.
@@ -24,12 +24,12 @@ def setup_openmeteo_client(cache_expire_after=3600):
 
 def convert_units(temperature_unit="celsius", wind_speed_unit="m/s", precipitation_unit="mm"):
     """
-    Converts units to Open-Meteo compliant unit strings.
+    Converts unit strings to Open-Meteo compliant format.
 
     Args:
-        temperature_unit (str, optional): Units for temperature. Defaults to 'celsius'.
-        wind_speed_unit (str, optional): Units for wind speed. Defaults to 'm/s'.
-        precipitation_unit (str, optional): Units for precipitation. Defaults to 'mm'.
+        temperature_unit (str, optional): Unit for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Unit for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Unit for precipitation. Defaults to 'mm'.
 
     Returns:
         tuple: Converted units for temperature, wind speed, and precipitation.
@@ -40,7 +40,7 @@ def convert_units(temperature_unit="celsius", wind_speed_unit="m/s", precipitati
 
     return (
         temperature_unit_map.get(temperature_unit, "celsius"),
-        wind_speed_unit_map.get(wind_speed_unit, "mph"),
+        wind_speed_unit_map.get(wind_speed_unit, "ms"),
         precipitation_unit_map.get(precipitation_unit, "mm")
     )
 
@@ -55,9 +55,9 @@ def get_historical_weather_data(latitude, longitude, start_date, end_date, tempe
         longitude (float): Longitude of the location.
         start_date (str): Start date for the data in 'YYYY-MM-DD' format.
         end_date (str): End date for the data in 'YYYY-MM-DD' format.
-        temperature_unit (str, optional): Units for temperature. Defaults to 'celsius'.
-        wind_speed_unit (str, optional): Units for wind speed. Defaults to 'm/s'.
-        precipitation_unit (str, optional): Units for precipitation. Defaults to 'mm'.
+        temperature_unit (str, optional): Unit for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Unit for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Unit for precipitation. Defaults to 'mm'.
 
     Returns:
         pd.DataFrame: DataFrame containing the historical weather data.
@@ -112,9 +112,9 @@ def get_forecast_data(latitude, longitude, temperature_unit="celsius", wind_spee
     Args:
         latitude (float): Latitude of the location.
         longitude (float): Longitude of the location.
-        temperature_unit (str, optional): Units for temperature. Defaults to 'celsius'.
-        wind_speed_unit (str, optional): Units for wind speed. Defaults to 'm/s'.
-        precipitation_unit (str, optional): Units for precipitation. Defaults to 'mm'.
+        temperature_unit (str, optional): Unit for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Unit for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Unit for precipitation. Defaults to 'mm'.
 
     Returns:
         pd.DataFrame: DataFrame containing the forecast weather data.
@@ -172,24 +172,19 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
     Args:
         latitude (float): Latitude of the location.
         longitude (float): Longitude of the location.
-        temperature_unit (str, optional): Units for temperature. Defaults to 'celsius'.
-        wind_speed_unit (str, optional): Units for wind speed. Defaults to 'm/s'.
-        precipitation_unit (str, optional): Units for precipitation. Defaults to 'mm'.
+        temperature_unit (str, optional): Unit for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Unit for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Unit for precipitation. Defaults to 'mm'.
 
     Returns:
         str: Formatted string containing the current weather data.
     """
-    # Convert units
     temperature_unit_, wind_speed_unit_, precipitation_unit_ = convert_units(
         temperature_unit, wind_speed_unit, precipitation_unit
     )
 
-    # Set up the Open-Meteo API client with cache and retry on error
-    cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
-    retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
-    openmeteo = openmeteo_requests.Client(session=retry_session)
+    openmeteo = setup_openmeteo_client()
 
-    # API URL and parameters
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": latitude,
@@ -205,8 +200,6 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
 
     # Fetch weather data
     responses = openmeteo.weather_api(url, params=params)
-
-    # Process first location response
     response = responses[0]
     current = response.Current()
 
@@ -232,13 +225,24 @@ def get_current_weather(latitude, longitude, temperature_unit="celsius",
         f"Wind Speed: {round(current_wind_speed_10m, 1)} {wind_speed_unit_}, "
         f"Wind Gusts: {round(current_wind_gusts_10m, 1)} {wind_speed_unit_}"
     )
-    # Example return: Time: 00:32, Apparent Temperature: 6.0 celsius, Relative Humidity: 60.0%, Rain: 0.0 mm,
-    # Showers: 0.0 mm, Snowfall: 0.0 mm, Wind Speed: 1.4 ms, Wind Gusts: 4.9 ms
     return weather_string
 
 
 def get_history_of_date(latitude, longitude, temperature_unit="celsius", wind_speed_unit="m/s",
                         precipitation_unit="mm"):
+    """
+    Fetches historical weather data for a specified location on this date for years starting from 1945.
+
+    Args:
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+        temperature_unit (str, optional): Unit for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Unit for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Unit for precipitation. Defaults to 'mm'.
+
+    Returns:
+        tuple: DataFrames containing today's weather data and historical weather data.
+    """
     temperature_unit_, wind_speed_unit_, precipitation_unit_ = convert_units(
         temperature_unit, wind_speed_unit, precipitation_unit
     )
@@ -305,6 +309,16 @@ def get_history_of_date(latitude, longitude, temperature_unit="celsius", wind_sp
 
 
 def compare_todays_data(today_df, historical_df):
+    """
+    Compares today's weather data with historical data and generates a comparison report.
+
+    Args:
+        today_df (pd.DataFrame): DataFrame containing today's weather data.
+        historical_df (pd.DataFrame): DataFrame containing historical weather data.
+
+    Returns:
+        str: Comparison report.
+    """
     report = []
 
     # Max and Min Temperature Analysis
@@ -320,7 +334,6 @@ def compare_todays_data(today_df, historical_df):
 
     max_temp_rank = (historical_sorted_by_max_temp['temperature_2m_max'] >= today_max_temp).sum()
     min_temp_rank = (historical_sorted_by_min_temp['temperature_2m_min'] <= today_min_temp).sum()
-    # This is ok, because sum of bool is effectively sum of 1s and 0s
 
     if max_temp_rank == 1:
         temp_rank_text = f"Today is the hottest day on this date since 1945"
@@ -347,11 +360,13 @@ def compare_todays_data(today_df, historical_df):
         max_precipitation = historical_df['precipitation_sum'].max()
         if today_precipitation > max_precipitation:
             report.append(
-                f"Today has the highest precipitation on this date since 1945 with {today_precipitation:.1f} mm of rain.")
+                f"Today has the highest precipitation on this date since 1945 with {today_precipitation:.1f} mm of "
+                f"rain.")
         else:
             wettest_year = historical_df.loc[historical_df['precipitation_sum'].idxmax(), 'date'].year
             report.append(
-                f"Today has {today_precipitation:.1f} mm of rain. The wettest day on this date since 1945 was in {wettest_year} with {max_precipitation:.1f} mm of rain.")
+                f"Today has {today_precipitation:.1f} mm of rain. The wettest day on this date since 1945 was in "
+                f"{wettest_year} with {max_precipitation:.1f} mm of rain.")
 
     # Wind Speed Analysis
     today_wind_speed = today_df['wind_speed_10m_max'].values[0]
@@ -370,9 +385,9 @@ def compare_todays_data(today_df, historical_df):
     else:
         wind_speed_text = f"Today is the {wind_speed_rank}-th windiest day on this date since 1945"
 
-
     report.append(
-        f"{wind_speed_text}, with the highest wind speed being in {max_wind_speed_year} with {max_wind_speed:.1f} m/s, and the calmest in {calmest_wind_year} with {calmest_wind_speed:.1f} m/s."
+        f"{wind_speed_text}, with the highest wind speed being in {max_wind_speed_year} with {max_wind_speed:.1f}"
+        f" m/s, and the calmest in {calmest_wind_year} with {calmest_wind_speed:.1f} m/s."
     )
 
     return "\n\n".join(report)
@@ -380,9 +395,23 @@ def compare_todays_data(today_df, historical_df):
 
 def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius",
                                  wind_speed_unit="m/s", precipitation_unit="mm"):
-    api_url = "http://misha1tigr.pythonanywhere.com//generate"
-    prompt_text = UA_prompt + get_current_weather(latitude, longitude, temperature_unit,
-                                                  wind_speed_unit, precipitation_unit)
+    """
+    Fetches clothing recommendations based on current weather data for the specified location.
+
+    Args:
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+        temperature_unit (str, optional): Unit for temperature. Defaults to 'celsius'.
+        wind_speed_unit (str, optional): Unit for wind speed. Defaults to 'm/s'.
+        precipitation_unit (str, optional): Unit for precipitation. Defaults to 'mm'.
+
+    Returns:
+        str: Clothing recommendations.
+    """
+    api_url = "http://misha1tigr.pythonanywhere.com/generate"
+    current_weather = get_current_weather(latitude, longitude, temperature_unit,
+                                          wind_speed_unit, precipitation_unit)
+    prompt_text = UA_prompt + current_weather
     response = requests.post(api_url, json={"prompt": prompt_text})
 
     if response.status_code == 200:
