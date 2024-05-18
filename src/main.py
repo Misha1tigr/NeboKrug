@@ -19,6 +19,9 @@ color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "ma
 
 
 def create_menu_bar(root):
+    """
+    Creates the menu bar for the main application window.
+    """
     menubar = tk.Menu(root)
 
     # Units of Measurement
@@ -44,6 +47,9 @@ def create_menu_bar(root):
 
 
 def settings_misc_window(root):
+    """
+    Opens the Miscellaneous Settings window.
+    """
     def on_save_and_close():
         settings_window.destroy()
 
@@ -59,6 +65,9 @@ def settings_misc_window(root):
 
 
 def settings_units_window(root):
+    """
+    Opens the Units of Measurement Settings window.
+    """
     def on_save_and_close():
         changed_settings = {
             "temperature_unit": temperature_unit_selected_option.get(),
@@ -113,6 +122,9 @@ def settings_units_window(root):
 
 
 def settings_locations_window(root):
+    """
+    Opens the Locations Settings window.
+    """
     def on_search():
         query = search_var.get()
         if query:
@@ -206,6 +218,9 @@ def settings_locations_window(root):
 
 
 def open_history_tab(master):
+    """
+    Opens the History tab in the main application.
+    """
     def on_refresh():
         location = location_var.get()
         if not location:
@@ -273,7 +288,8 @@ def open_history_tab(master):
         ax_daylight = None
         ax_wind = None
 
-        if 'temperature_2m_max' in selected_columns or 'temperature_2m_min' in selected_columns or 'temperature_2m_mean' in selected_columns:
+        if ('temperature_2m_max' in selected_columns or 'temperature_2m_min' in selected_columns
+                or 'temperature_2m_mean' in selected_columns):
             ax_temp = ax
             color_index += 1
 
@@ -415,6 +431,9 @@ def open_history_tab(master):
 
 
 def open_forecast_tab(master):
+    """
+    Opens the Forecast tab in the main application.
+    """
     def on_refresh(fetch_new_data=True):
         location = location_var.get()
         if not location:
@@ -491,8 +510,10 @@ def open_forecast_tab(master):
         axis_map = {}
         legend_handles = []
 
-        # Define a function to get or create the appropriate axis
         def get_or_create_axis(key, position, side):
+            """
+             Function to get or create a new axis for plotting.
+             """
             if key not in axis_map:
                 new_ax = ax.twinx() if side == 'right' else ax.twinx()
                 new_ax.spines[side].set_position(('outward', position))
@@ -643,7 +664,24 @@ def open_forecast_tab(master):
     forecast_slider.grid(column=1, row=4, columnspan=5, pady=5)
 
 
+def loading_animation(flag, loading_label):
+    """
+    Runs a loading animation within the given label
+    """
+    flag.clear()
+    animation_symbols = ['|', '/', '–', '\\']
+    i = 0
+    while not flag.is_set():
+        loading_label.config(text=f"Loading {animation_symbols[i % len(animation_symbols)]}")
+        i += 1
+        time.sleep(0.1)
+    loading_label.config(text="")  # Clear the loading text once done
+
+
 def open_clothing_recommendations_tab(frame):
+    """
+    Opens the Clothing Recommendations tab in the main application.
+    """
     # Clear the parent frame
     for widget in frame.winfo_children():
         widget.destroy()
@@ -677,7 +715,7 @@ def open_clothing_recommendations_tab(frame):
         temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
 
         # Start the loading animation in a separate thread
-        loading_thread = threading.Thread(target=loading_animation)
+        loading_thread = threading.Thread(target=loading_animation, args=(stop_loading, loading_label))
         loading_thread.start()
 
         # Get clothing recommendations in a separate thread
@@ -690,16 +728,6 @@ def open_clothing_recommendations_tab(frame):
                                                        precipitation_unit)
         recommendation_label.config(text=recommendations, font=("Helvetica", 12))
         stop_loading.set()  # Signal to stop the loading animation
-
-    def loading_animation():
-        stop_loading.clear()
-        animation_symbols = ['|', '/', '–', '\\']
-        i = 0
-        while not stop_loading.is_set():
-            loading_label.config(text=f"Loading {animation_symbols[i % len(animation_symbols)]}")
-            i += 1
-            time.sleep(0.1)
-        loading_label.config(text="")  # Clear the loading text once done
 
     stop_loading = threading.Event()
 
@@ -730,6 +758,9 @@ def open_clothing_recommendations_tab(frame):
 
 
 def display_weather_facts(frame):
+    """
+    Displays weather fun facts in the Fun Facts tab.
+    """
     def get_random_fact(file_path):
         with open(file_path, 'r') as file:
             facts = file.readlines()
@@ -783,6 +814,9 @@ def display_weather_facts(frame):
 
 
 def open_day_in_history_tab(frame):
+    """
+    Generates the "This Day in History" tab in the main application.
+    """
     # Clear the parent frame
     for widget in frame.winfo_children():
         widget.destroy()
@@ -817,7 +851,7 @@ def open_day_in_history_tab(frame):
         temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
 
         # Start the loading animation in a separate thread
-        loading_thread = threading.Thread(target=loading_animation)
+        loading_thread = threading.Thread(target=loading_animation, args=(stop_loading, loading_label))
         loading_thread.start()
 
         # Get clothing recommendations in a separate thread
@@ -831,16 +865,6 @@ def open_day_in_history_tab(frame):
         text_analisys = compare_todays_data(data_today, data_before)
         recommendation_label.config(text=text_analisys, font=("Helvetica", 12))
         stop_loading.set()  # Signal to stop the loading animation
-
-    def loading_animation():
-        stop_loading.clear()
-        animation_symbols = ['|', '/', '–', '\\']
-        i = 0
-        while not stop_loading.is_set():
-            loading_label.config(text=f"Loading {animation_symbols[i % len(animation_symbols)]}")
-            i += 1
-            time.sleep(0.1)
-        loading_label.config(text="")  # Clear the loading text once done
 
     stop_loading = threading.Event()
 
@@ -871,6 +895,9 @@ def open_day_in_history_tab(frame):
 
 
 def create_tabs(root):
+    """
+    Creates tabs and their contents
+    """
     global history_frame, forecast_frame, forecast_ai_frame, this_day_history_frame
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
@@ -880,10 +907,10 @@ def create_tabs(root):
     open_forecast_tab(forecast_frame)
     notebook.add(forecast_frame, text="Forecast")
 
-    # Forecast AI Tab
+    # Clothing recommendations Tab
     forecast_ai_frame = ttk.Frame(notebook, padding="10")
     open_clothing_recommendations_tab(forecast_ai_frame)
-    notebook.add(forecast_ai_frame, text="Forecast AI")
+    notebook.add(forecast_ai_frame, text="AI Recommendations")
 
     # History Tab
     history_frame = ttk.Frame(notebook, padding="10")
@@ -903,7 +930,7 @@ def create_tabs(root):
 
 def initialize_main_window():
     root = tk.Tk()
-    root.title("Weather App")
+    root.title("NeboKrug")
 
     # Create a menu bar
     create_menu_bar(root)
