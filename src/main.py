@@ -14,6 +14,12 @@ from tkcalendar import DateEntry
 import threading
 import time
 import random
+import gettext
+
+selected_locale = load_settings().get("locale", "ua")
+text_object = gettext.translation('main', localedir='../locales', languages=[selected_locale])
+text_object.install()
+_ = text_object.gettext
 
 color_cycle = ["red", "green", "blue", "yellow", "orange", "purple", "cyan", "magenta", "lime", "pink", "teal",
                "lavender", "brown", "beige", "maroon", "mint", "olive", "coral", "navy", "grey"]
@@ -26,7 +32,7 @@ def create_menu_bar(root):
     menubar = tk.Menu(root)
 
     # Units of Measurement
-    menubar.add_command(label="Units of Measurement", command=lambda: settings_units_window(root))
+    menubar.add_command(label=_("Units of Measurement"), command=lambda: settings_units_window(root))
 
     # Your Locations
     # Creates a list of functions to call when the location list is updated
@@ -36,20 +42,21 @@ def create_menu_bar(root):
         (open_clothing_recommendations_tab, (forecast_ai_frame,)),
         (open_day_in_history_tab, (this_day_history_frame,))
     ]
-    menubar.add_command(label="Your Locations", command=lambda: settings_locations_window(root, function_list_with_params))
+    menubar.add_command(label=_("Your Locations"), command=lambda: settings_locations_window(root,
+                                                                                          function_list_with_params))
 
     # Other Settings
-    menubar.add_command(label="Other Settings", command=lambda: settings_misc_window(root))
+    menubar.add_command(label=_("Other Settings"), command=lambda: settings_misc_window(root))
 
     # Info Menu
     info_menu = tk.Menu(menubar, tearoff=0)
-    info_menu.add_command(label="Help", command=lambda: open_help_window())
-    info_menu.add_command(label="Feedback", command=lambda: open_feedback_window())
-    info_menu.add_command(label="About", command=lambda: open_about_window())
-    menubar.add_cascade(label="Info", menu=info_menu)
+    info_menu.add_command(label=_("Help"), command=lambda: open_help_window())
+    info_menu.add_command(label=_("Feedback"), command=lambda: open_feedback_window())
+    info_menu.add_command(label=_("About"), command=lambda: open_about_window())
+    menubar.add_cascade(label=_("Info"), menu=info_menu)
 
     # Exit
-    menubar.add_command(label="Exit", command=root.quit)
+    menubar.add_command(label=_("Exit"), command=root.quit)
 
     root.config(menu=menubar)
 
@@ -60,13 +67,13 @@ def open_history_tab(master):
     def on_refresh():
         location = location_var.get()
         if not location:
-            messagebox.showerror("Error", "Please select a location.")
+            messagebox.showerror(_("Error"), _("Please select a location."))
             return
 
         start_date = start_date_var.get()
         end_date = end_date_var.get()
         if not start_date or not end_date:
-            messagebox.showerror("Error", "Please select a date range.")
+            messagebox.showerror(_("Error"), _("Please select a date range."))
             return
 
         for loc in stored_locations_listbox.locations:
@@ -104,7 +111,7 @@ def open_history_tab(master):
             selected_columns.append('wind_speed_10m_max')
 
         if not selected_columns:
-            messagebox.showerror("Error", "Please select at least one data type to display.")
+            messagebox.showerror(_("Error"), _("Please select at least one data type to display."))
             return
 
         # Convert date column to datetime
@@ -210,7 +217,7 @@ def open_history_tab(master):
     frame.pack(fill='both', expand=True)
 
     # Location selection combobox
-    ttk.Label(frame, text="Location").grid(column=0, row=0, padx=5, pady=5)
+    ttk.Label(frame, text=_("Location")).grid(column=0, row=0, padx=5, pady=5)
     location_var = tk.StringVar()
     stored_locations_listbox = tk.Listbox(frame)
     stored_locations_listbox.locations = load_settings().get("locations", [])
@@ -223,39 +230,39 @@ def open_history_tab(master):
         location_combobox.current(0)  # Select the first location by default
 
     # Date selectors with DateEntry widgets from tkcalendar
-    ttk.Label(frame, text="Start Date").grid(column=0, row=1, padx=5, pady=5)
+    ttk.Label(frame, text=_("Start Date")).grid(column=0, row=1, padx=5, pady=5)
     start_date_var = tk.StringVar(value="2024-01-01")
     start_date_entry = DateEntry(frame, textvariable=start_date_var, date_pattern='yyyy-mm-dd')
     start_date_entry.set_date("2024-01-01")
     start_date_entry.grid(column=1, row=1, padx=5, pady=5)
 
-    ttk.Label(frame, text="End Date").grid(column=0, row=2, padx=5, pady=5)
+    ttk.Label(frame, text=_("End Date")).grid(column=0, row=2, padx=5, pady=5)
     end_date_var = tk.StringVar(value="2024-02-01")
     end_date_entry = DateEntry(frame, textvariable=end_date_var, date_pattern='yyyy-mm-dd')
     end_date_entry.grid(column=1, row=2, padx=5, pady=5)
 
     # Checkboxes for data selection
     temperature_max_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Temperature Max", variable=temperature_max_var).grid(column=2, row=0, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature Max"), variable=temperature_max_var).grid(column=2, row=0, padx=5, pady=5)
 
     temperature_min_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Temperature Min", variable=temperature_min_var).grid(column=2, row=1, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature Min"), variable=temperature_min_var).grid(column=2, row=1, padx=5, pady=5)
 
     temperature_mean_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text="Temperature Mean", variable=temperature_mean_var).grid(column=2, row=2, padx=5, pady=5)
 
     daylight_duration_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Daylight Duration", variable=daylight_duration_var).grid(column=3, row=0, padx=5,
+    ttk.Checkbutton(frame, text=_("Daylight Duration"), variable=daylight_duration_var).grid(column=3, row=0, padx=5,
                                                                                           pady=5)
 
     precipitation_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Precipitation", variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Precipitation"), variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
 
     wind_speed_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Wind Speed", variable=wind_speed_var).grid(column=3, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Wind Speed"), variable=wind_speed_var).grid(column=3, row=2, padx=5, pady=5)
 
     # Refresh button
-    refresh_button = ttk.Button(frame, text="Refresh", command=on_refresh)
+    refresh_button = ttk.Button(frame, text=_("Refresh"), command=on_refresh)
     refresh_button.grid(column=4, row=0, padx=5, pady=5, rowspan=3, sticky=tk.N + tk.S)
 
     # Canvas for the graph
@@ -273,7 +280,7 @@ def open_forecast_tab(master):
     def on_refresh(fetch_new_data=True):
         location = location_var.get()
         if not location:
-            messagebox.showerror("Error", "Please select a location.")
+            messagebox.showerror(_("Error"), _("Please select a location."))
             return
 
         for loc in stored_locations_listbox.locations:
@@ -326,7 +333,7 @@ def open_forecast_tab(master):
             selected_columns.append('uv_index')
 
         if not selected_columns:
-            messagebox.showerror("Error", "Please select at least one data type to display.")
+            messagebox.showerror(_("Error"), _("Please select at least one data type to display."))
             return
 
         # Convert date column to datetime
@@ -438,7 +445,7 @@ def open_forecast_tab(master):
     frame.pack(fill='both', expand=True)
 
     # Location selection combobox
-    ttk.Label(frame, text="Location").grid(column=0, row=0, padx=5, pady=5)
+    ttk.Label(frame, text=_("Location")).grid(column=0, row=0, padx=5, pady=5)
     location_var = tk.StringVar()
     stored_locations_listbox = tk.Listbox(frame)
     stored_locations_listbox.locations = load_settings().get("locations", [])
@@ -452,38 +459,38 @@ def open_forecast_tab(master):
 
     # Checkboxes for data selection
     temperature_2m_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Temperature", variable=temperature_2m_var).grid(column=2, row=0, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature"), variable=temperature_2m_var).grid(column=2, row=0, padx=5, pady=5)
 
     relative_humidity_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Relative Humidity", variable=relative_humidity_var).grid(column=2, row=1, padx=5,
+    ttk.Checkbutton(frame, text=_("Relative Humidity"), variable=relative_humidity_var).grid(column=2, row=1, padx=5,
                                                                                           pady=5)
 
     apparent_temperature_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Apparent Temperature", variable=apparent_temperature_var).grid(column=2, row=2, padx=5,
+    ttk.Checkbutton(frame, text=_("Apparent Temperature"), variable=apparent_temperature_var).grid(column=2, row=2, padx=5,
                                                                                                 pady=5)
 
     precipitation_probability_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Precipitation Probability", variable=precipitation_probability_var).grid(column=3,
+    ttk.Checkbutton(frame, text=_("Precipitation Probability"), variable=precipitation_probability_var).grid(column=3,
                                                                                                           row=0, padx=5,
                                                                                                           pady=5)
 
     precipitation_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Precipitation", variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Precipitation"), variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
 
     surface_pressure_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Surface Pressure", variable=surface_pressure_var).grid(column=3, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Surface Pressure"), variable=surface_pressure_var).grid(column=3, row=2, padx=5, pady=5)
 
     visibility_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Visibility", variable=visibility_var).grid(column=4, row=0, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Visibility"), variable=visibility_var).grid(column=4, row=0, padx=5, pady=5)
 
     wind_speed_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="Wind Speed", variable=wind_speed_var).grid(column=4, row=1, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Wind Speed"), variable=wind_speed_var).grid(column=4, row=1, padx=5, pady=5)
 
     uv_index_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text="UV Index", variable=uv_index_var).grid(column=4, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("UV Index"), variable=uv_index_var).grid(column=4, row=2, padx=5, pady=5)
 
     # Refresh button
-    refresh_button = ttk.Button(frame, text="Refresh", command=lambda: on_refresh(fetch_new_data=True))
+    refresh_button = ttk.Button(frame, text=_("Refresh"), command=lambda: on_refresh(fetch_new_data=True))
     refresh_button.grid(column=5, row=0, padx=5, pady=5, rowspan=3, sticky=tk.N + tk.S)
 
     # Canvas for the graph
@@ -494,7 +501,7 @@ def open_forecast_tab(master):
     canvas.draw()
 
     # Slider for adjusting forecast days
-    ttk.Label(frame, text="Forecast Days").grid(column=0, row=4, padx=5, pady=5)
+    ttk.Label(frame, text=_("Forecast Days")).grid(column=0, row=4, padx=5, pady=5)
     forecast_slider = ttk.Scale(frame, from_=1, to=14, value=14, orient='horizontal', length=400,
                                 command=lambda a: on_refresh(fetch_new_data=False))
     forecast_slider.grid(column=1, row=4, columnspan=5, pady=5)
@@ -508,7 +515,7 @@ def loading_animation(flag, loading_label):
     animation_symbols = ['|', '/', '–', '\\']
     i = 0
     while not flag.is_set():
-        loading_label.config(text=f"Loading {animation_symbols[i % len(animation_symbols)]}")
+        loading_label.config(text=_("Loading") +f"{animation_symbols[i % len(animation_symbols)]}")
         i += 1
         time.sleep(0.1)
     loading_label.config(text="")  # Clear the loading text once done
@@ -528,13 +535,13 @@ def open_clothing_recommendations_tab(frame):
     frame.grid_columnconfigure(2, weight=1)
 
     # Add label for the frame
-    frame_label = ttk.Label(frame, text="Clothing Recommendations", font=("Helvetica", 16, "bold"))
+    frame_label = ttk.Label(frame, text=_("Clothing Recommendations"), font=("Helvetica", 16, "bold"))
     frame_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='n')
 
     def on_refresh():
         location = location_var.get()
         if not location:
-            messagebox.showerror("Error", "Please select a location.")
+            messagebox.showerror(_("Error"), _("Please select a location."))
             return
 
         for loc in stored_locations_listbox.locations:
@@ -568,7 +575,7 @@ def open_clothing_recommendations_tab(frame):
     stop_loading = threading.Event()
 
     # Location selection combobox
-    ttk.Label(frame, text="Location").grid(column=0, row=1, padx=5, pady=5, sticky='e')
+    ttk.Label(frame, text=_("Location")).grid(column=0, row=1, padx=5, pady=5, sticky='e')
     location_var = tk.StringVar()
     stored_locations_listbox = tk.Listbox(frame)
     stored_locations_listbox.locations = load_settings().get("locations", [])
@@ -581,7 +588,7 @@ def open_clothing_recommendations_tab(frame):
         location_combobox.current(0)  # Select the first location by default
 
     # Refresh button
-    refresh_button = ttk.Button(frame, text="Refresh", command=on_refresh)
+    refresh_button = ttk.Button(frame, text=_("Refresh"), command=on_refresh)
     refresh_button.grid(column=2, row=1, padx=5, pady=5, sticky='w')
 
     # Label to display the loading animation
@@ -625,7 +632,7 @@ def display_weather_facts(frame):
     short_file1 = './fun_facts/short1_en.txt'
     short_file2 = './fun_facts/short2_en.txt'
 
-    ttk.Label(frame, text="Weather fun facts just for you", font="bold").grid(column=0, row=0, padx=5, pady=5,
+    ttk.Label(frame, text=_("Weather fun facts just for you"), font="bold").grid(column=0, row=0, padx=5, pady=5,
                                                                               columnspan=2)
     # Create buttons and place them in the grid
     long_title, long_fact = get_fact_and_title(long_file)
@@ -663,14 +670,14 @@ def open_day_in_history_tab(frame):
     frame.grid_columnconfigure(2, weight=1)
 
     # Add label for the frame
-    frame_label = ttk.Label(frame, text="What is today like, compared to previous years?",
+    frame_label = ttk.Label(frame, text=_("What is today like, compared to previous years?"),
                             font=("Helvetica", 16, "bold"))
     frame_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='n')
 
     def on_refresh():
         location = location_var.get()
         if not location:
-            messagebox.showerror("Error", "Please select a location.")
+            messagebox.showerror(_("Error"), _("Please select a location."))
             return
 
         for loc in stored_locations_listbox.locations:
@@ -705,7 +712,7 @@ def open_day_in_history_tab(frame):
     stop_loading = threading.Event()
 
     # Location selection combobox
-    ttk.Label(frame, text="Location").grid(column=0, row=1, padx=5, pady=5, sticky='e')
+    ttk.Label(frame, text=_("Location")).grid(column=0, row=1, padx=5, pady=5, sticky='e')
     location_var = tk.StringVar()
     stored_locations_listbox = tk.Listbox(frame)
     stored_locations_listbox.locations = load_settings().get("locations", [])
@@ -718,7 +725,7 @@ def open_day_in_history_tab(frame):
         location_combobox.current(0)  # Select the first location by default
 
     # Refresh button
-    refresh_button = ttk.Button(frame, text="Refresh", command=on_refresh)
+    refresh_button = ttk.Button(frame, text=_("Refresh"), command=on_refresh)
     refresh_button.grid(column=2, row=1, padx=5, pady=5, sticky='w')
 
     # Label to display the loading animation
@@ -741,32 +748,32 @@ def create_tabs(root):
     # Forecast Tab
     forecast_frame = ttk.Frame(notebook, padding="10")
     open_forecast_tab(forecast_frame)
-    notebook.add(forecast_frame, text="Forecast")
+    notebook.add(forecast_frame, text=_("Forecast"))
 
     # Clothing recommendations Tab
     forecast_ai_frame = ttk.Frame(notebook, padding="10")
     open_clothing_recommendations_tab(forecast_ai_frame)
-    notebook.add(forecast_ai_frame, text="AI Recommendations")
+    notebook.add(forecast_ai_frame, text=_("AI Recommendations"))
 
     # History Tab
     history_frame = ttk.Frame(notebook, padding="10")
     open_history_tab(history_frame)
-    notebook.add(history_frame, text="History")
+    notebook.add(history_frame, text=_("History"))
 
     # This day in history Tab
     this_day_history_frame = ttk.Frame(notebook, padding="10")
     open_day_in_history_tab(this_day_history_frame)
-    notebook.add(this_day_history_frame, text="This day in history")
+    notebook.add(this_day_history_frame, text=_("This day in history"))
 
     # Fun fact Tab
     fun_fact_frame = ttk.Frame(notebook, padding="10")
     display_weather_facts(fun_fact_frame)
-    notebook.add(fun_fact_frame, text="Fun fact")
+    notebook.add(fun_fact_frame, text=_("Fun fact"))
 
 
 def initialize_main_window():
     root = tk.Tk()
-    root.title("NeboKrug")
+    root.title(_("NeboKrug"))
     create_tabs(root)
     create_menu_bar(root)
     root.mainloop()

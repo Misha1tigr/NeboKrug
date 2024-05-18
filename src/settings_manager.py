@@ -22,7 +22,8 @@ settings_schema = {
                 },
                 "required": ["name", "country", "latitude", "longitude"]
             }
-        }
+        },
+        "locale": {"type": "string", "enum": ["en", "ua"]},
     },
     "required": ["temperature_unit", "wind_speed_unit", "precipitation_unit"]
 }

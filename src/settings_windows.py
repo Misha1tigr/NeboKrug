@@ -2,20 +2,42 @@ import tkinter as tk
 from tkinter import ttk
 from settings_manager import save_settings, load_settings, save_locations
 from api import search_location
+import os
+import sys
+
 def settings_misc_window(root):
     """
     Opens the Miscellaneous Settings window.
     """
+
     def on_save_and_close():
+        settings["locale"] = "en" if language_selected_option.get() == "English" else "ua"
+        save_settings(settings)  # Save the settings to a JSON file
         settings_window.destroy()
+        os.execl(sys.executable, sys.executable, *sys.argv) # Restart the app
+
+    settings = load_settings()  # Load settings from the JSON file
 
     settings_window = tk.Toplevel()
-    settings_window.title("Units of Measurement")
+    settings_window.title("Miscellaneous Settings")
     settings_window.protocol("WM_DELETE_WINDOW", on_save_and_close)
+
     frame = ttk.Frame(settings_window, padding="10")
     frame.pack(fill='both', expand=True)
-    sample_text = ttk.Label(frame, text="Work in progress")
-    sample_text.pack()
+
+    # Language Selection
+    ttk.Label(frame, text="App Language").grid(column=0, row=0, padx=5, pady=5)
+    language_options = ["English", "Українська"]
+    language_selected_option = tk.StringVar()
+    language_selected_option.set("English" if settings.get("locale", "en") == "en" else "Українська")
+    language_dropdown = ttk.Combobox(frame, textvariable=language_selected_option,
+                                     values=language_options, state="readonly")
+    language_dropdown.grid(column=1, row=0, padx=5, pady=5)
+
+    # Save and Close Button
+    save_and_close_btn = ttk.Button(frame, text="Save & Restart", command=on_save_and_close)
+    save_and_close_btn.grid(column=0, row=1, columnspan=2, pady=10)
+
     settings_window.transient(root)
     settings_window.grab_set()
 
@@ -24,6 +46,7 @@ def settings_units_window(root):
     """
     Opens the Units of Measurement Settings window.
     """
+
     def on_save_and_close():
         changed_settings = {
             "temperature_unit": temperature_unit_selected_option.get(),
@@ -81,6 +104,7 @@ def settings_locations_window(root, updates_to_call):
     """
     Opens the Locations Settings window.
     """
+
     def on_search():
         query = search_var.get()
         if query:

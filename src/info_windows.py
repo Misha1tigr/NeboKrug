@@ -9,7 +9,7 @@ version = "0.1.0"
 def open_help_window():
     """Opens a help window with contact information and links."""
     window = tk.Toplevel()
-    window.title("Help")
+    window.title()
 
     frame = ttk.Frame(window, padding="10")
     frame.pack(fill='both', expand=True)

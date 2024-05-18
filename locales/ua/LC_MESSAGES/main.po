@@ -1,0 +1,177 @@
+# Translations for NeboKrug app.
+# Copyright (C) 2024 Myself
+# Korbut Mykhailo <korbutmykhailo@gmail.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2024-05-18 22:29+0300\n"
+"PO-Revision-Date: 2024-05-18 22:29+0300\n"
+"Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
+"Language-Team: N/A <email@email.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+#: C:/NeboKrug/src/main.py:30
+msgid "Units of Measurement"
+msgstr "Одиниці вимірювання"
+
+#: C:/NeboKrug/src/main.py:40
+msgid "Your Locations"
+msgstr "Ваші місця розташування"
+
+#: C:/NeboKrug/src/main.py:44
+msgid "Other Settings"
+msgstr "Інші налаштування"
+
+#: C:/NeboKrug/src/main.py:48
+msgid "Help"
+msgstr "Допомога"
+
+#: C:/NeboKrug/src/main.py:49
+msgid "Feedback"
+msgstr "Відгук"
+
+#: C:/NeboKrug/src/main.py:50
+msgid "About"
+msgstr "Про програму"
+
+#: C:/NeboKrug/src/main.py:51
+msgid "Info"
+msgstr "Інформація"
+
+#: C:/NeboKrug/src/main.py:54
+msgid "Exit"
+msgstr "Вихід"
+
+#: C:/NeboKrug/src/main.py:65 C:/NeboKrug/src/main.py:71
+#: C:/NeboKrug/src/main.py:109 C:/NeboKrug/src/main.py:278
+#: C:/NeboKrug/src/main.py:331 C:/NeboKrug/src/main.py:539
+#: C:/NeboKrug/src/main.py:675
+msgid "Error"
+msgstr "Помилка"
+
+#: C:/NeboKrug/src/main.py:65 C:/NeboKrug/src/main.py:278
+#: C:/NeboKrug/src/main.py:539 C:/NeboKrug/src/main.py:675
+msgid "Please select a location."
+msgstr "Будь ласка, виберіть місце."
+
+#: C:/NeboKrug/src/main.py:71
+msgid "Please select a date range."
+msgstr "Будь ласка, виберіть діапазон дат."
+
+#: C:/NeboKrug/src/main.py:109 C:/NeboKrug/src/main.py:331
+msgid "Please select at least one data type to display."
+msgstr "Будь ласка, виберіть хоча б один тип даних для відображення."
+
+#: C:/NeboKrug/src/main.py:215 C:/NeboKrug/src/main.py:443
+#: C:/NeboKrug/src/main.py:573 C:/NeboKrug/src/main.py:710
+msgid "Location"
+msgstr "Місце розташування"
+
+#: C:/NeboKrug/src/main.py:228
+msgid "Start Date"
+msgstr "Дата початку"
+
+#: C:/NeboKrug/src/main.py:234
+msgid "End Date"
+msgstr "Дата закінчення"
+
+#: C:/NeboKrug/src/main.py:241
+msgid "Temperature Max"
+msgstr "Максимальна температура"
+
+#: C:/NeboKrug/src/main.py:244
+msgid "Temperature Min"
+msgstr "Мінімальна температура"
+
+#: C:/NeboKrug/src/main.py:250
+msgid "Daylight Duration"
+msgstr "Тривалість світлового дня"
+
+#: C:/NeboKrug/src/main.py:254 C:/NeboKrug/src/main.py:473
+msgid "Precipitation"
+msgstr "Опади"
+
+#: C:/NeboKrug/src/main.py:257 C:/NeboKrug/src/main.py:482
+msgid "Wind Speed"
+msgstr "Швидкість вітру"
+
+#: C:/NeboKrug/src/main.py:260 C:/NeboKrug/src/main.py:488
+#: C:/NeboKrug/src/main.py:586 C:/NeboKrug/src/main.py:723
+msgid "Refresh"
+msgstr "Оновити"
+
+#: C:/NeboKrug/src/main.py:457
+msgid "Temperature"
+msgstr "Температура"
+
+#: C:/NeboKrug/src/main.py:460
+msgid "Relative Humidity"
+msgstr "Відносна вологість"
+
+#: C:/NeboKrug/src/main.py:464
+msgid "Apparent Temperature"
+msgstr "Відчутна температура"
+
+#: C:/NeboKrug/src/main.py:468
+msgid "Precipitation Probability"
+msgstr "Ймовірність опадів"
+
+#: C:/NeboKrug/src/main.py:476
+msgid "Surface Pressure"
+msgstr "Поверхневий тиск"
+
+#: C:/NeboKrug/src/main.py:479
+msgid "Visibility"
+msgstr "Видимість"
+
+#: C:/NeboKrug/src/main.py:485
+msgid "UV Index"
+msgstr "Індекс УФ"
+
+#: C:/NeboKrug/src/main.py:499
+msgid "Forecast Days"
+msgstr "Дні прогнозу"
+
+#: C:/NeboKrug/src/main.py:513
+msgid "Loading"
+msgstr "Завантаження"
+
+#: C:/NeboKrug/src/main.py:533
+msgid "Clothing Recommendations"
+msgstr "Рекомендації щодо одягу"
+
+#: C:/NeboKrug/src/main.py:630
+msgid "Weather fun facts just for you"
+msgstr "Цікаві факти про погоду для вас"
+
+#: C:/NeboKrug/src/main.py:668
+msgid "What is today like, compared to previous years?"
+msgstr "Яким є сьогоднішній день порівняно з попередніми роками?"
+
+#: C:/NeboKrug/src/main.py:746
+msgid "Forecast"
+msgstr "Прогноз"
+
+#: C:/NeboKrug/src/main.py:751
+msgid "AI Recommendations"
+msgstr "Рекомендації штучного інтелекту"
+
+#: C:/NeboKrug/src/main.py:756
+msgid "History"
+msgstr "Історія"
+
+#: C:/NeboKrug/src/main.py:761
+msgid "This day in history"
+msgstr "Цей день в історії"
+
+#: C:/NeboKrug/src/main.py:766
+msgid "Fun fact"
+msgstr "Цікавий факт"
+
+#: C:/NeboKrug/src/main.py:771
+msgid "NeboKrug"
+msgstr "НебоКруг"
