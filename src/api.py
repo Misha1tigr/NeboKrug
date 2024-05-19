@@ -6,6 +6,13 @@ from retry_requests import retry
 from datetime import datetime
 from ai_prompts import UA_prompt, EN_prompt
 from settings_manager import load_settings
+import gettext
+
+selected_locale = load_settings().get("locale", "en")
+text_object = gettext.translation('info', localedir='../locales', languages=[selected_locale])
+text_object.install()
+_ = text_object.gettext
+
 
 def setup_openmeteo_client(cache_expire_after=3600):
     """
@@ -22,7 +29,7 @@ def setup_openmeteo_client(cache_expire_after=3600):
     return openmeteo_requests.Client(session=retry_session)
 
 
-def convert_units(temperature_unit="celsius", wind_speed_unit="m/s", precipitation_unit="mm"):
+def convert_units(temperature_unit="Celsius °C", wind_speed_unit="m/s", precipitation_unit="Millimeter"):
     """
     Converts unit strings to Open-Meteo compliant format.
 
@@ -34,9 +41,11 @@ def convert_units(temperature_unit="celsius", wind_speed_unit="m/s", precipitati
     Returns:
         tuple: Converted units for temperature, wind speed, and precipitation.
     """
-    temperature_unit_map = {"Fahrenheit °F": "fahrenheit", "celsius": "celsius"}
-    precipitation_unit_map = {"Inch": "inch", "mm": "mm"}
-    wind_speed_unit_map = {"Km/h": "kmh", "m/s": "ms", "Knots": "kn", "mph": "mph"}
+    temperature_unit_map = {"Fahrenheit °F": "fahrenheit", "Celsius °C": "celsius", "гр. Цельсія °C": "celsius",
+                            "гр. Фаренгейта °F": "fahrenheit"}
+    precipitation_unit_map = {"Inch": "inch", "Millimeter": "mm", "Дюйм": "inch", "Міліметр": "mm"}
+    wind_speed_unit_map = {"Km/h": "kmh", "m/s": "ms", "Knots": "kn", "Mph": "mph", "Км/год": "kmh", "м/с": "ms",
+                           "Вузли": "kn", "Миль/год": "mph"}
 
     return (
         temperature_unit_map.get(temperature_unit, "celsius"),
@@ -422,7 +431,7 @@ def get_clothing_recommendations(latitude, longitude, temperature_unit="celsius"
     if response.status_code == 200:
         return response.json()["response"]
     else:
-        return "Помилка при завантаженні даних"
+        return _("Error while loading data: ") + str(response.status_code)
 
 
 def search_location(query):

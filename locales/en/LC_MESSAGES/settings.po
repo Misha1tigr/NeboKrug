@@ -1,7 +1,7 @@
 # Translations for NeboKrug app.
 # Copyright (C) 2024 Myself
 # Korbut Mykhailo <korbutmykhailo@gmail.com>, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
@@ -9,8 +9,9 @@ msgstr ""
 "PO-Revision-Date: 2024-05-18 22:29+0300\n"
 "Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
 "Language-Team: N/A <email@email.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp1251\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
@@ -34,16 +35,51 @@ msgstr "Units of Measurement"
 msgid "Temperature Units"
 msgstr "Temperature Units"
 
+#: C:/NeboKrug/src/settings_windows.py:76
+msgid "Fahrenheit °F"
+msgstr "Fahrenheit °F"
+
+#: C:/NeboKrug/src/settings_windows.py:76
+#: C:/NeboKrug/src/settings_windows.py:78
+msgid "Celsius °C"
+msgstr "Celsius °C"
+
 #: C:/NeboKrug/src/settings_windows.py:84
 msgid "Wind Speed Units"
 msgstr "Wind Speed Units"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "Knots"
+msgstr "Knots"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "Mph"
+msgstr "Mph"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "m/s"
+msgstr "m/s"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+#: C:/NeboKrug/src/settings_windows.py:87
+msgid "Km/h"
+msgstr "Km/h"
 
 #: C:/NeboKrug/src/settings_windows.py:93
 msgid "Precipitation Units"
 msgstr "Precipitation Units"
 
+#: C:/NeboKrug/src/settings_windows.py:94
+msgid "Inch"
+msgstr "Inch"
+
+#: C:/NeboKrug/src/settings_windows.py:94
+#: C:/NeboKrug/src/settings_windows.py:96
+msgid "Millimeter"
+msgstr "Millimeter"
+
 #: C:/NeboKrug/src/settings_windows.py:102
-#: C:/NeboKrug/src/settings_windows.py:197
+#: C:/NeboKrug/src/settings_windows.py:196
 msgid "Save & Close"
 msgstr "Save & Close"
 
@@ -55,26 +91,25 @@ msgstr "Your Locations"
 msgid "Your saved locations"
 msgstr "Your saved locations"
 
-#: C:/NeboKrug/src/settings_windows.py:160
-msgid "Stored Locations"
-msgstr "Stored Locations"
-
-#: C:/NeboKrug/src/settings_windows.py:175
+#: C:/NeboKrug/src/settings_windows.py:174
 msgid "Add"
 msgstr "Add"
 
-#: C:/NeboKrug/src/settings_windows.py:178
+#: C:/NeboKrug/src/settings_windows.py:177
 msgid "Delete"
 msgstr "Delete"
 
-#: C:/NeboKrug/src/settings_windows.py:182
+#: C:/NeboKrug/src/settings_windows.py:181
 msgid "Search Location"
 msgstr "Search Location (English only)"
 
-#: C:/NeboKrug/src/settings_windows.py:187
+#: C:/NeboKrug/src/settings_windows.py:186
 msgid "Search"
 msgstr "Search"
 
-#: C:/NeboKrug/src/settings_windows.py:191
+#: C:/NeboKrug/src/settings_windows.py:190
 msgid "Search Results"
 msgstr "Search Results"
+
+#~ msgid "Stored Locations"
+#~ msgstr "Stored Locations"

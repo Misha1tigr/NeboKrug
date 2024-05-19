@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translations for NeboKrug app.
+# Copyright (C) 2024 Myself
+# Korbut Mykhailo <korbutmykhailo@gmail.com>, 2024.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-05-19 00:12+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2024-05-18 22:29+0300\n"
+"PO-Revision-Date: 2024-05-18 22:29+0300\n"
+"Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
+"Language-Team: N/A <email@email.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1251\n"
 "Content-Transfer-Encoding: 8bit\n"

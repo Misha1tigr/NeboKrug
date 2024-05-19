@@ -73,27 +73,27 @@ def settings_units_window(root):
 
     # Temperature Units
     ttk.Label(frame, text=_("Temperature Units")).grid(column=0, row=0, padx=5, pady=5)
-    temperature_unit_options = ["Celsius °C", "Fahrenheit °F"]
+    temperature_unit_options = [_("Celsius °C"), _("Fahrenheit °F")]
     temperature_unit_selected_option = tk.StringVar()
-    temperature_unit_selected_option.set(settings.get("temperature_unit", "Celsius °C"))
+    temperature_unit_selected_option.set(settings.get("temperature_unit", _("Celsius °C")))
     temperature_unit_dropdown = ttk.Combobox(frame, textvariable=temperature_unit_selected_option,
                                              values=temperature_unit_options, state="readonly")
     temperature_unit_dropdown.grid(column=1, row=0, padx=5, pady=5)
 
     # Wind Speed Units
     ttk.Label(frame, text=_("Wind Speed Units")).grid(column=0, row=1, padx=5, pady=5)
-    windspeed_unit_options = ["Km/h", "m/s", "Mph", "Knots"]
+    windspeed_unit_options = [_("Km/h"), _("m/s"), _("Mph"), _("Knots")]
     windspeed_unit_selected_option = tk.StringVar()
-    windspeed_unit_selected_option.set(settings.get("wind_speed_unit", "Km/h"))
+    windspeed_unit_selected_option.set(settings.get("wind_speed_unit", _("Km/h")))
     windspeed_unit_dropdown = ttk.Combobox(frame, textvariable=windspeed_unit_selected_option,
                                            values=windspeed_unit_options, state="readonly")
     windspeed_unit_dropdown.grid(column=1, row=1, padx=5, pady=5)
 
     # Precipitation Units
     ttk.Label(frame, text=_("Precipitation Units")).grid(column=0, row=2, padx=5, pady=5)
-    precipitation_unit_options = ["Millimeter", "Inch"]
+    precipitation_unit_options = [_("Millimeter"), _("Inch")]
     precipitation_unit_selected_option = tk.StringVar()
-    precipitation_unit_selected_option.set(settings.get("precipitation_unit", "Millimeter"))
+    precipitation_unit_selected_option.set(settings.get("precipitation_unit", _("Millimeter")))
     precipitation_unit_dropdown = ttk.Combobox(frame, textvariable=precipitation_unit_selected_option,
                                                values=precipitation_unit_options, state="readonly")
     precipitation_unit_dropdown.grid(column=1, row=2, padx=5, pady=5)

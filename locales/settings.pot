@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
 "Language-Team: N/A <email@email.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp1251\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
@@ -35,16 +35,51 @@ msgstr ""
 msgid "Temperature Units"
 msgstr ""
 
+#: C:/NeboKrug/src/settings_windows.py:76
+msgid "Fahrenheit °F"
+msgstr ""
+
+#: C:/NeboKrug/src/settings_windows.py:76
+#: C:/NeboKrug/src/settings_windows.py:78
+msgid "Celsius °C"
+msgstr ""
+
 #: C:/NeboKrug/src/settings_windows.py:84
 msgid "Wind Speed Units"
+msgstr ""
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "Knots"
+msgstr ""
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "Mph"
+msgstr ""
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "m/s"
+msgstr ""
+
+#: C:/NeboKrug/src/settings_windows.py:85
+#: C:/NeboKrug/src/settings_windows.py:87
+msgid "Km/h"
 msgstr ""
 
 #: C:/NeboKrug/src/settings_windows.py:93
 msgid "Precipitation Units"
 msgstr ""
 
+#: C:/NeboKrug/src/settings_windows.py:94
+msgid "Inch"
+msgstr ""
+
+#: C:/NeboKrug/src/settings_windows.py:94
+#: C:/NeboKrug/src/settings_windows.py:96
+msgid "Millimeter"
+msgstr ""
+
 #: C:/NeboKrug/src/settings_windows.py:102
-#: C:/NeboKrug/src/settings_windows.py:197
+#: C:/NeboKrug/src/settings_windows.py:196
 msgid "Save & Close"
 msgstr ""
 
@@ -56,27 +91,23 @@ msgstr ""
 msgid "Your saved locations"
 msgstr ""
 
-#: C:/NeboKrug/src/settings_windows.py:160
-msgid "Stored Locations"
-msgstr ""
-
-#: C:/NeboKrug/src/settings_windows.py:175
+#: C:/NeboKrug/src/settings_windows.py:174
 msgid "Add"
 msgstr ""
 
-#: C:/NeboKrug/src/settings_windows.py:178
+#: C:/NeboKrug/src/settings_windows.py:177
 msgid "Delete"
 msgstr ""
 
-#: C:/NeboKrug/src/settings_windows.py:182
+#: C:/NeboKrug/src/settings_windows.py:181
 msgid "Search Location"
 msgstr ""
 
-#: C:/NeboKrug/src/settings_windows.py:187
+#: C:/NeboKrug/src/settings_windows.py:186
 msgid "Search"
 msgstr ""
 
-#: C:/NeboKrug/src/settings_windows.py:191
+#: C:/NeboKrug/src/settings_windows.py:190
 msgid "Search Results"
 msgstr ""
 

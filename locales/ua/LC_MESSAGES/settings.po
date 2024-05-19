@@ -1,7 +1,7 @@
 # Translations for NeboKrug app.
 # Copyright (C) 2024 Myself
 # Korbut Mykhailo <korbutmykhailo@gmail.com>, 2024.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
@@ -9,73 +9,107 @@ msgstr ""
 "PO-Revision-Date: 2024-05-18 22:29+0300\n"
 "Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
 "Language-Team: N/A <email@email.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp1251\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-
 #: C:/NeboKrug/src/settings_windows.py:28
 msgid "Miscellaneous Settings"
-msgstr "Р†РЅС€С– РЅР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ"
+msgstr "Інші налаштування"
 
 #: C:/NeboKrug/src/settings_windows.py:35
 msgid "App Language"
-msgstr "РњРѕРІР° РґРѕРґР°С‚РєСѓ"
+msgstr "Мова додатку"
 
 #: C:/NeboKrug/src/settings_windows.py:44
 msgid "Save & Restart"
-msgstr "Р—Р±РµСЂРµРіС‚Рё С‚Р° РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚Рё"
+msgstr "Зберегти та перезапустити"
 
 #: C:/NeboKrug/src/settings_windows.py:68
 msgid "Units of Measurement"
-msgstr "РћРґРёРЅРёС†С– РІРёРјС–СЂСѓ"
+msgstr "Одиниці виміру"
 
 #: C:/NeboKrug/src/settings_windows.py:75
 msgid "Temperature Units"
-msgstr "РћРґРёРЅРёС†С– С‚РµРјРїРµСЂР°С‚СѓСЂРё"
+msgstr "Одиниці температури"
+
+#: C:/NeboKrug/src/settings_windows.py:76
+msgid "Fahrenheit °F"
+msgstr "гр. Фаренгейта °F"
+
+#: C:/NeboKrug/src/settings_windows.py:76
+#: C:/NeboKrug/src/settings_windows.py:78
+msgid "Celsius °C"
+msgstr "гр. Цельсія °C"
 
 #: C:/NeboKrug/src/settings_windows.py:84
 msgid "Wind Speed Units"
-msgstr "РћРґРёРЅРёС†С– С€РІРёРґРєРѕСЃС‚С– РІС–С‚СЂСѓ"
+msgstr "Одиниці швидкості вітру"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "Knots"
+msgstr "Вузли"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "Mph"
+msgstr "Миль/год"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+msgid "m/s"
+msgstr "м/с"
+
+#: C:/NeboKrug/src/settings_windows.py:85
+#: C:/NeboKrug/src/settings_windows.py:87
+msgid "Km/h"
+msgstr "Км/год"
 
 #: C:/NeboKrug/src/settings_windows.py:93
 msgid "Precipitation Units"
-msgstr "РћРґРёРЅРёС†С– РІРёРјС–СЂСѓ РѕРїР°РґС–РІ"
+msgstr "Одиниці виміру опадів"
+
+#: C:/NeboKrug/src/settings_windows.py:94
+msgid "Inch"
+msgstr "Дюйм"
+
+#: C:/NeboKrug/src/settings_windows.py:94
+#: C:/NeboKrug/src/settings_windows.py:96
+msgid "Millimeter"
+msgstr "Міліметр"
 
 #: C:/NeboKrug/src/settings_windows.py:102
-#: C:/NeboKrug/src/settings_windows.py:197
+#: C:/NeboKrug/src/settings_windows.py:196
 msgid "Save & Close"
-msgstr "Р—Р±РµСЂРµРіС‚Рё С‚Р° Р·Р°РєСЂРёС‚Рё"
+msgstr "Зберегти та закрити"
 
 #: C:/NeboKrug/src/settings_windows.py:153
 msgid "Your Locations"
-msgstr "Р’Р°С€С– Р»РѕРєР°С†С–С—"
+msgstr "Ваші локації"
 
 #: C:/NeboKrug/src/settings_windows.py:158
 msgid "Your saved locations"
-msgstr "Р’Р°С€С– Р·Р±РµСЂРµР¶РµРЅС– РјС–СЃС†СЏ"
+msgstr "Ваші збережені місця"
 
-#: C:/NeboKrug/src/settings_windows.py:160
-msgid "Stored Locations"
-msgstr "Р—Р±РµСЂРµР¶РµРЅС– РјС–СЃС†СЏ"
-
-#: C:/NeboKrug/src/settings_windows.py:175
+#: C:/NeboKrug/src/settings_windows.py:174
 msgid "Add"
-msgstr "Р”РѕРґР°С‚Рё"
+msgstr "Додати"
 
-#: C:/NeboKrug/src/settings_windows.py:178
+#: C:/NeboKrug/src/settings_windows.py:177
 msgid "Delete"
-msgstr "Р’РёРґР°Р»РёС‚Рё"
+msgstr "Видалити"
 
-#: C:/NeboKrug/src/settings_windows.py:182
+#: C:/NeboKrug/src/settings_windows.py:181
 msgid "Search Location"
-msgstr "РџРѕС€СѓРє РЅР°СЃРµР»РµРЅРѕРіРѕ РїСѓРЅРєС‚Сѓ (Р»РёС€Рµ Р°РЅРіР»С–Р№СЃСЊРєРѕСЋ)"
+msgstr "Пошук населеного пункту (лише англійською)"
 
-#: C:/NeboKrug/src/settings_windows.py:187
+#: C:/NeboKrug/src/settings_windows.py:186
 msgid "Search"
-msgstr "РџРѕС€СѓРє"
+msgstr "Пошук"
 
-#: C:/NeboKrug/src/settings_windows.py:191
+#: C:/NeboKrug/src/settings_windows.py:190
 msgid "Search Results"
-msgstr "Р РµР·СѓР»СЊС‚Р°С‚Рё РїРѕС€СѓРєСѓ"
+msgstr "Результати пошуку"
+
+#~ msgid "Stored Locations"
+#~ msgstr "Збережені місця"

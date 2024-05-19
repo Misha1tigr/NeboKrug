@@ -7,9 +7,11 @@ from jsonschema import validate, ValidationError
 settings_schema = {
     "type": "object",
     "properties": {
-        "temperature_unit": {"type": "string", "enum": ["Celsius °C", "Fahrenheit °F"]},
-        "wind_speed_unit": {"type": "string", "enum": ["Km/h", "m/s", "mph", "Knots"]},
-        "precipitation_unit": {"type": "string", "enum": ["Millimeter", "Inch"]},
+        "temperature_unit": {"type": "string", "enum": ["Celsius °C", "Fahrenheit °F", "гр. Цельсія °C",
+                                                        "гр. Фаренгейта °F"]},
+        "wind_speed_unit": {"type": "string", "enum": ["Km/h", "m/s", "Mph", "Knots", "Км/год", "м/с", "Миль/год",
+                                                       "Вузли"]},
+        "precipitation_unit": {"type": "string", "enum": ["Millimeter", "Inch", "Міліметр", "Дюйм"]},
         "locations": {
             "type": "array",
             "items": {
