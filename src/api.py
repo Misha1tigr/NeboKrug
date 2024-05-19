@@ -8,8 +8,8 @@ from ai_prompts import UA_prompt, EN_prompt
 from settings_manager import load_settings
 import gettext
 
-selected_locale = load_settings().get("locale", "en")
-text_object = gettext.translation('info', localedir='../locales', languages=[selected_locale])
+selected_locale = load_settings().get("locale", "ua")
+text_object = gettext.translation('api', localedir='../locales', languages=[selected_locale])
 text_object.install()
 _ = text_object.gettext
 
@@ -345,18 +345,20 @@ def compare_todays_data(today_df, historical_df):
     min_temp_rank = (historical_sorted_by_min_temp['temperature_2m_min'] <= today_min_temp).sum()
 
     if max_temp_rank == 1:
-        temp_rank_text = f"Today is the hottest day on this date since 1945"
+        temp_rank_text = _("Today is the hottest day on this date since 1945")
     elif min_temp_rank == 1:
-        temp_rank_text = f"Today is the coldest day on this date since 1945"
+        temp_rank_text = _("Today is the coldest day on this date since 1945")
     else:
         if max_temp_rank >= min_temp_rank:
-            temp_rank_text = f"Today is the {max_temp_rank}-th hottest day on this date since 1945"
+            temp_rank_text = _("Today is the {}-th hottest day on this date since 1945").format(max_temp_rank)
         else:
-            temp_rank_text = f"Today is the {min_temp_rank}-th coldest day on this date since 1945"
+            temp_rank_text = _("Today is the {}-th coldest day on this date since 1945").format(min_temp_rank)
 
     report.append(
-        f"{temp_rank_text}, with the hottest being in {hottest_year} with a max temperature of {hottest_temp:.1f}°C, "
-        f"and the coldest being in {coldest_year} with a min temperature of {coldest_temp:.1f}°C."
+        temp_rank_text + _(", with the hottest being in ") + f"{hottest_year}" + _(" with a max temperature of ") +
+        f"{hottest_temp:.1f}°C, " + _("and the coldest being in ") + f"{coldest_year}" + _(
+            " with a min temperature of ") +
+        f"{coldest_temp:.1f}°C."
     )
 
     # Precipitation Analysis
@@ -364,18 +366,21 @@ def compare_todays_data(today_df, historical_df):
     if today_precipitation == 0:
         last_rain_year = historical_df[historical_df['precipitation_sum'] > 0].iloc[-1]['date'].year
         last_rain_amount = historical_df[historical_df['precipitation_sum'] > 0].iloc[-1]['precipitation_sum']
-        report.append(f"Last rain on this date was in {last_rain_year} with {last_rain_amount:.1f} mm of rain.")
+        report.append(
+            _("Last rain on this date was in ") + f"{last_rain_year}" + _(" with ") + f"{last_rain_amount:.1f}" +
+            _(" mm of rain."))
     else:
         max_precipitation = historical_df['precipitation_sum'].max()
         if today_precipitation > max_precipitation:
             report.append(
-                f"Today has the highest precipitation on this date since 1945 with {today_precipitation:.1f} mm of "
-                f"rain.")
+                _("Today has the highest precipitation on this date since 1945 with ") + f"{today_precipitation:.1f}" +
+                _(" mm of rain."))
         else:
             wettest_year = historical_df.loc[historical_df['precipitation_sum'].idxmax(), 'date'].year
             report.append(
-                f"Today has {today_precipitation:.1f} mm of rain. The wettest day on this date since 1945 was in "
-                f"{wettest_year} with {max_precipitation:.1f} mm of rain.")
+                _("Today has ") + f"{today_precipitation:.1f}" + _(
+                    " mm of rain. The wettest day on this date since 1945 was in ") + f"{wettest_year}" + _(
+                    " with ") + f"{max_precipitation:.1f}" + _(" mm of rain."))
 
     # Wind Speed Analysis
     today_wind_speed = today_df['wind_speed_10m_max'].values[0]
@@ -390,15 +395,15 @@ def compare_todays_data(today_df, historical_df):
     wind_speed_rank = (historical_sorted_by_wind_speed['wind_speed_10m_max'] >= today_wind_speed).sum()
 
     if wind_speed_rank == 1:
-        wind_speed_text = f"Today has the highest wind speed on this date since 1945"
+        wind_speed_text = _("Today has the highest wind speed on this date since 1945")
     else:
-        wind_speed_text = f"Today is the {wind_speed_rank}-th windiest day on this date since 1945"
+        wind_speed_text = _("Today is the {}-th windiest day on this date since 1945").format(wind_speed_rank)
 
     report.append(
-        f"{wind_speed_text}, with the highest wind speed being in {max_wind_speed_year} with {max_wind_speed:.1f}"
-        f" m/s, and the calmest in {calmest_wind_year} with {calmest_wind_speed:.1f} m/s."
+        wind_speed_text + _(", with the highest wind speed being in ") + f"{max_wind_speed_year}" + _(" with ") +
+        f"{max_wind_speed:.1f}" + _(" m/s, and the calmest in ") + f"{calmest_wind_year}" + _(
+            " with ") + f"{calmest_wind_speed:.1f}" + _(" m/s.")
     )
-
     return "\n\n".join(report)
 
 

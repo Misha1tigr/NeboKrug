@@ -9,13 +9,92 @@ msgstr ""
 "PO-Revision-Date: 2024-05-18 22:29+0300\n"
 "Last-Translator: Korbut Mykhailo <korbutmykhailo@gmail.com>\n"
 "Language-Team: N/A <email@email.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1251\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: C:/NeboKrug/src/api.py:434
+#: C:/NeboKrug/src/api.py:348
+msgid "Today is the hottest day on this date since 1945"
+msgstr "Today is the hottest day on this date since 1945"
+
+#: C:/NeboKrug/src/api.py:350
+msgid "Today is the coldest day on this date since 1945"
+msgstr "Today is the coldest day on this date since 1945"
+
+#: C:/NeboKrug/src/api.py:353
+msgid "Today is the {}-th hottest day on this date since 1945"
+msgstr "Today is the {}-th hottest day on this date since 1945"
+
+#: C:/NeboKrug/src/api.py:355
+msgid "Today is the {}-th coldest day on this date since 1945"
+msgstr "Today is the {}-th coldest day on this date since 1945"
+
+#: C:/NeboKrug/src/api.py:358
+msgid " with a max temperature of "
+msgstr " with a max temperature of "
+
+#: C:/NeboKrug/src/api.py:358
+msgid ", with the hottest being in "
+msgstr ", with the hottest being in "
+
+#: C:/NeboKrug/src/api.py:359
+msgid " with a min temperature of "
+msgstr " with a min temperature of "
+
+#: C:/NeboKrug/src/api.py:359
+msgid "and the coldest being in "
+msgstr "and the coldest being in "
+
+#: C:/NeboKrug/src/api.py:370
+msgid "Last rain on this date was in "
+msgstr "Last rain on this date was in "
+
+#: C:/NeboKrug/src/api.py:370 C:/NeboKrug/src/api.py:382
+#: C:/NeboKrug/src/api.py:403 C:/NeboKrug/src/api.py:404
+msgid " with "
+msgstr " with "
+
+#: C:/NeboKrug/src/api.py:371 C:/NeboKrug/src/api.py:377
+#: C:/NeboKrug/src/api.py:383
+msgid " mm of rain."
+msgstr " mm of rain."
+
+#: C:/NeboKrug/src/api.py:376
+msgid "Today has the highest precipitation on this date since 1945 with "
+msgstr "Today has the highest precipitation on this date since 1945 withLOL "
+
+#: C:/NeboKrug/src/api.py:381
+msgid " mm of rain. The wettest day on this date since 1945 was in "
+msgstr " mm of rain. The wettest day on this date since 1945 was in "
+
+#: C:/NeboKrug/src/api.py:381
+msgid "Today has "
+msgstr "Today has "
+
+#: C:/NeboKrug/src/api.py:398
+msgid "Today has the highest wind speed on this date since 1945"
+msgstr "Today has the highest wind speed on this date since 1945"
+
+#: C:/NeboKrug/src/api.py:400
+msgid "Today is the {}-th windiest day on this date since 1945"
+msgstr "Today is the {}-th windiest day on this date since 1945"
+
+#: C:/NeboKrug/src/api.py:403
+msgid ", with the highest wind speed being in "
+msgstr ", with the highest wind speed being in "
+
+#: C:/NeboKrug/src/api.py:404
+msgid " m/s, and the calmest in "
+msgstr " m/s, and the calmest in "
+
+#: C:/NeboKrug/src/api.py:405
+msgid " m/s."
+msgstr " m/s."
+
+#: C:/NeboKrug/src/api.py:440
 msgid "Error while loading data: "
 msgstr "Error while loading data: "
 

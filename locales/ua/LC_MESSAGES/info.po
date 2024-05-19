@@ -21,115 +21,115 @@ msgid ""
 " or \n"
 "contact me on GitHub at github.com/Misha1tigr/NeboKrug"
 msgstr ""
-"РџРѕС‚СЂС–Р±РЅР° РґРѕРїРѕРјРѕРіР°? \n"
-"РќР°РїРёС€С–С‚СЊ Р»РёСЃС‚Р° РЅР° korbutmykhailo@gmail.com\n"
-" Р°Р±Рѕ \n"
-"Р·РІ'СЏР¶С–С‚СЊСЃСЏ Р·С– РјРЅРѕСЋ РЅР° GitHub Р·Р° Р°РґСЂРµСЃРѕСЋ github.com/Misha1tigr/NeboKrug"
+"Потрібна допомога? \n"
+"Напишіть листа на korbutmykhailo@gmail.com\n"
+" або \n"
+"зв'яжіться зі мною на GitHub за адресою github.com/Misha1tigr/NeboKrug"
 
 #: C:/NeboKrug/src/info_windows.py:39
 msgid "Open Email"
-msgstr "Р’С–РґРєСЂРёС‚Рё РµР»РµРєС‚СЂРѕРЅРЅСѓ РїРѕС€С‚Сѓ"
+msgstr "Відкрити електронну пошту"
 
 #: C:/NeboKrug/src/info_windows.py:47 C:/NeboKrug/src/info_windows.py:83
 msgid "Open GitHub"
-msgstr "Р’С–РґРєСЂРёС‚Рё GitHub"
+msgstr "Відкрити GitHub"
 
 #: C:/NeboKrug/src/info_windows.py:55 C:/NeboKrug/src/info_windows.py:91
 #: C:/NeboKrug/src/info_windows.py:169
 msgid "Close"
-msgstr "Р—Р°РєСЂРёС‚Рё"
+msgstr "Закрити"
 
 #: C:/NeboKrug/src/info_windows.py:64
 msgid "Feedback"
-msgstr "Р’С–РґРіСѓРє"
+msgstr "Відгук"
 
 #: C:/NeboKrug/src/info_windows.py:71
 msgid ""
 "Have feedback to share?\n"
 "Open an issue at GitHub here: github.com/Misha1tigr/NeboKrug"
 msgstr ""
-"Р„ РІС–РґРіСѓРєРё?\n"
-"Р’С–РґРєСЂРёР№С‚Рµ issue РЅР° GitHub С‚СѓС‚: github.com/Misha1tigr/NeboKrug"
+"Є відгуки?\n"
+"Відкрийте issue на GitHub тут: github.com/Misha1tigr/NeboKrug"
 
 #: C:/NeboKrug/src/info_windows.py:100
 msgid "About"
-msgstr "РџСЂРѕ РїСЂРѕРіСЂР°РјСѓ"
+msgstr "Про програму"
 
 #: C:/NeboKrug/src/info_windows.py:106
 msgid "Weather App"
-msgstr "Р”РѕРґР°С‚РѕРє РќРµР±РѕРљСЂСѓРі"
+msgstr "Додаток НебоКруг"
 
 #: C:/NeboKrug/src/info_windows.py:109
 msgid "About:"
-msgstr "РџСЂРѕ РїСЂРѕРіСЂР°РјСѓ:"
+msgstr "Про програму:"
 
 #: C:/NeboKrug/src/info_windows.py:110
 msgid "The Weather App is a versatile and user-friendly application designed to provide comprehensive weather information, historical data, and AI-driven outfit recommendations. Built using Python and leveraging the Open-Meteo API, the app offers a wide range of features to keep users informed and prepared for any weather conditions."
-msgstr "Р”РѕРґР°С‚РѕРє РќРµР±РѕРљСЂСѓРі вЂ” С†Рµ Р±Р°РіР°С‚РѕС„СѓРЅРєС†С–РѕРЅР°Р»СЊРЅРёР№ С‚Р° Р·СЂСѓС‡РЅРёР№ РґРѕРґР°С‚РѕРє, РїСЂРёР·РЅР°С‡РµРЅРёР№ РґР»СЏ РЅР°РґР°РЅРЅСЏ РІСЃРµР±С–С‡РЅРѕС— С–РЅС„РѕСЂРјР°С†С–С— РїСЂРѕ РїРѕРіРѕРґСѓ, С–СЃС‚РѕСЂРёС‡РЅРёС… РґР°РЅС– С‚Р° СЂРµРєРѕРјРµРЅРґР°С†С–Р№ С‰РѕРґРѕ РѕРґСЏРіСѓ, Р·Р°СЂСЏРґР¶РµРЅРёР№ С€С‚СѓС‡РЅРёРј С–РЅС‚РµР»РµРєС‚РѕРј. РЎС‚РІРѕСЂРµРЅРёР№ Р·Р° РґРѕРїРѕРјРѕРіРѕСЋ Python С‚Р° API Open-Meteo, РґРѕРґР°С‚РѕРє РїСЂРѕРїРѕРЅСѓС” С€РёСЂРѕРєРёР№ СЃРїРµРєС‚СЂ С„СѓРЅРєС†С–Р№, С‰РѕР± С‚СЂРёРјР°С‚Рё РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ Сѓ РєСѓСЂСЃС– С‚Р° РїС–РґРіРѕС‚СѓРІР°С‚Рё С—С… РґРѕ Р±СѓРґСЊ-СЏРєРёС… РїРѕРіРѕРґРЅРёС… СѓРјРѕРІ."
+msgstr "Додаток НебоКруг — це багатофункціональний та зручний додаток, призначений для надання всебічної інформації про погоду, історичних дані та рекомендацій щодо одягу, заряджений штучним інтелектом. Створений за допомогою Python та API Open-Meteo, додаток пропонує широкий спектр функцій, щоб тримати користувачів у курсі та підготувати їх до будь-яких погодних умов."
 
 #: C:/NeboKrug/src/info_windows.py:118
 msgid "Features:"
-msgstr "Р¤СѓРЅРєС†С–С—:"
+msgstr "Функції:"
 
 #: C:/NeboKrug/src/info_windows.py:119
 msgid "- Current Weather & Forecast: Get up-to-date weather information and a 14-day forecast for your selected locations."
-msgstr "- РџРѕС‚РѕС‡РЅР° РїРѕРіРѕРґР° С‚Р° РїСЂРѕРіРЅРѕР·: РћС‚СЂРёРјСѓР№С‚Рµ Р°РєС‚СѓР°Р»СЊРЅСѓ С–РЅС„РѕСЂРјР°С†С–СЋ РїСЂРѕ РїРѕРіРѕРґСѓ С‚Р° 14-РґРµРЅРЅРёР№ РїСЂРѕРіРЅРѕР· РґР»СЏ РѕР±СЂР°РЅРёС… РІР°РјРё РјС–СЃС†СЊ."
+msgstr "- Поточна погода та прогноз: Отримуйте актуальну інформацію про погоду та 14-денний прогноз для обраних вами місць."
 
 #: C:/NeboKrug/src/info_windows.py:124
 msgid "- Historical Weather Data: Access historical weather data, allowing you to compare today's weather with past conditions."
-msgstr "- Р†СЃС‚РѕСЂРёС‡РЅС– РґР°РЅС– РїСЂРѕ РїРѕРіРѕРґСѓ: РћС‚СЂРёРјР°Р№С‚Рµ РґРѕСЃС‚СѓРї РґРѕ С–СЃС‚РѕСЂРёС‡РЅРёС… РґР°РЅРёС… РїСЂРѕ РїРѕРіРѕРґСѓ, С‰Рѕ РґРѕР·РІРѕР»СЏС” РїРѕСЂС–РІРЅСЋРІР°С‚Рё СЃСЊРѕРіРѕРґРЅС–С€РЅСЋ РїРѕРіРѕРґСѓ Р· РјРёРЅСѓР»РёРјРё СѓРјРѕРІР°РјРё."
+msgstr "- Історичні дані про погоду: Отримайте доступ до історичних даних про погоду, що дозволяє порівнювати сьогоднішню погоду з минулими умовами."
 
 #: C:/NeboKrug/src/info_windows.py:129
 msgid "- AI Outfit Recommendations: Receive personalized outfit suggestions based on the weather forecast."
-msgstr "- Р РµРєРѕРјРµРЅРґР°С†С–С— С‰РѕРґРѕ РѕРґСЏРіСѓ РЅР° РѕСЃРЅРѕРІС– С€С‚СѓС‡РЅРѕРіРѕ С–РЅС‚РµР»РµРєС‚Сѓ: РћС‚СЂРёРјСѓР№С‚Рµ РїРµСЂСЃРѕРЅР°Р»С–Р·РѕРІР°РЅС– РїСЂРѕРїРѕР·РёС†С–С— С‰РѕРґРѕ РѕРґСЏРіСѓ РЅР° РѕСЃРЅРѕРІС– РїСЂРѕРіРЅРѕР·Сѓ РїРѕРіРѕРґРё."
+msgstr "- Рекомендації щодо одягу на основі штучного інтелекту: Отримуйте персоналізовані пропозиції щодо одягу на основі прогнозу погоди."
 
 #: C:/NeboKrug/src/info_windows.py:132
 msgid "- Daily Fun Facts: Learn interesting and fun facts about the weather each day."
-msgstr "- Р©РѕРґРµРЅРЅС– С†С–РєР°РІС– С„Р°РєС‚Рё: Р”С–Р·РЅР°РІР°Р№С‚РµСЃСЏ С†С–РєР°РІС– С‚Р° РІРµСЃРµР»С– С„Р°РєС‚Рё РїСЂРѕ РїРѕРіРѕРґСѓ РєРѕР¶РЅРѕРіРѕ РґРЅСЏ."
+msgstr "- Щоденні цікаві факти: Дізнавайтеся цікаві та веселі факти про погоду кожного дня."
 
 #: C:/NeboKrug/src/info_windows.py:133
 msgid "Developed By:"
-msgstr "Р РѕР·СЂРѕР±РЅРёРє:"
+msgstr "Розробник:"
 
 #: C:/NeboKrug/src/info_windows.py:134
 msgid "Korbut Mykhailo"
-msgstr "РљРѕСЂР±СѓС‚ РњРёС…Р°Р№Р»Рѕ"
+msgstr "Корбут Михайло"
 
 #: C:/NeboKrug/src/info_windows.py:136
 msgid "Acknowledgements:"
-msgstr "РџРѕРґСЏРєРё:"
+msgstr "Подяки:"
 
 #: C:/NeboKrug/src/info_windows.py:137
 msgid "This app was developed as part of a coursework project, and I would like to extend my gratitude to the following resources and libraries that made this possible:"
-msgstr "Р¦РµР№ РґРѕРґР°С‚РѕРє Р±СѓРІ СЂРѕР·СЂРѕР±Р»РµРЅРёР№ СЏРє С‡Р°СЃС‚РёРЅР° РєСѓСЂСЃРѕРІРѕС— СЂРѕР±РѕС‚Рё, С– СЏ С…РѕС‚С–РІ Р±Рё РІРёСЃР»РѕРІРёС‚Рё СЃРІРѕСЋ РїРѕРґСЏРєСѓ РЅР°СЃС‚СѓРїРЅРёРј СЂРµСЃСѓСЂСЃР°Рј С– Р±С–Р±Р»С–РѕС‚РµРєР°Рј, СЏРєС– Р·СЂРѕР±РёР»Рё С†Рµ РјРѕР¶Р»РёРІРёРј:"
+msgstr "Цей додаток був розроблений як частина курсової роботи, і я хотів би висловити свою подяку наступним ресурсам і бібліотекам, які зробили це можливим:"
 
 #: C:/NeboKrug/src/info_windows.py:142
 msgid "- Open-Meteo API: For providing reliable weather and geocoding data."
-msgstr "- API Open-Meteo: Р—Р° РЅР°РґР°РЅРЅСЏ РґРѕСЃС‚РѕРІС–СЂРЅРёС… РґР°РЅРёС… РїСЂРѕ РїРѕРіРѕРґСѓ С‚Р° РіРµРѕРєРѕРґСѓРІР°РЅРЅСЏ."
+msgstr "- API Open-Meteo: За надання достовірних даних про погоду та геокодування."
 
 #: C:/NeboKrug/src/info_windows.py:143
 msgid "- Tkinter and Ttk: For the graphical user interface components."
-msgstr "- Tkinter С– ttk: Р—Р° РєРѕРјРїРѕРЅРµРЅС‚Рё РіСЂР°С„С–С‡РЅРѕРіРѕ С–РЅС‚РµСЂС„РµР№СЃСѓ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°."
+msgstr "- Tkinter і ttk: За компоненти графічного інтерфейсу користувача."
 
 #: C:/NeboKrug/src/info_windows.py:144
 msgid "- Matplotlib: For the plotting and visualization of weather data."
-msgstr "- Matplotlib: Р—Р° РїРѕР±СѓРґРѕРІСѓ РіСЂР°С„С–РєС–РІ С– РІС–Р·СѓР°Р»С–Р·Р°С†С–СЋ РґР°РЅРёС… РїСЂРѕ РїРѕРіРѕРґСѓ."
+msgstr "- Matplotlib: За побудову графіків і візуалізацію даних про погоду."
 
 #: C:/NeboKrug/src/info_windows.py:145
 msgid "- Pandas: For data manipulation and analysis."
-msgstr "- Pandas: Р—Р° РѕР±СЂРѕР±РєСѓ С‚Р° Р°РЅР°Р»С–Р· РґР°РЅРёС…."
+msgstr "- Pandas: За обробку та аналіз даних."
 
 #: C:/NeboKrug/src/info_windows.py:147
 msgid "Contact Information:"
-msgstr "РљРѕРЅС‚Р°РєС‚РЅР° С–РЅС„РѕСЂРјР°С†С–СЏ:"
+msgstr "Контактна інформація:"
 
 #: C:/NeboKrug/src/info_windows.py:148
 msgid "For more information, feedback, or support, please contact:"
-msgstr "Р”Р»СЏ РѕС‚СЂРёРјР°РЅРЅСЏ РґРѕРґР°С‚РєРѕРІРѕС— С–РЅС„РѕСЂРјР°С†С–С—, РІС–РґРіСѓРєС–РІ Р°Р±Рѕ РїС–РґС‚СЂРёРјРєРё, Р±СѓРґСЊ Р»Р°СЃРєР°, Р·РІ'СЏР¶С–С‚СЊСЃСЏ Р·С– РјРЅРѕСЋ:"
+msgstr "Для отримання додаткової інформації, відгуків або підтримки, будь ласка, зв'яжіться зі мною:"
 
 #: C:/NeboKrug/src/info_windows.py:149
 msgid "- Email: korbutmykhailo@gmail.com"
-msgstr "- Р•Р»РµРєС‚СЂРѕРЅРЅР° РїРѕС€С‚Р°: korbutmykhailo@gmail.com"
+msgstr "- Електронна пошта: korbutmykhailo@gmail.com"
 
 #: C:/NeboKrug/src/info_windows.py:150
 msgid "- GitHub: github.com/Misha1tigr"
@@ -137,4 +137,4 @@ msgstr "- GitHub: github.com/Misha1tigr"
 
 #: C:/NeboKrug/src/info_windows.py:152
 msgid "Thank you for using the Weather App! Stay informed and enjoy the weather!"
-msgstr "Р”СЏРєСѓС”РјРѕ, С‰Рѕ РІРёРєРѕСЂРёСЃС‚РѕРІСѓС”С‚Рµ РґРѕРґР°С‚РѕРє РќРµР±РѕРљСЂСѓРі! Р‘СѓРґСЊС‚Рµ РІ РєСѓСЂСЃС– С‚Р° РЅР°СЃРѕР»РѕРґР¶СѓР№С‚РµСЃСЏ РїРѕРіРѕРґРѕСЋ!"
+msgstr "Дякуємо, що використовуєте додаток НебоКруг! Будьте в курсі та насолоджуйтеся погодою!"

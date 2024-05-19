@@ -6,7 +6,7 @@ import os
 import sys
 import gettext
 
-selected_locale = load_settings().get("locale", "en")
+selected_locale = load_settings().get("locale", "ua")
 text_object = gettext.translation('settings', localedir='../locales', languages=[selected_locale])
 text_object.install()
 _ = text_object.gettext

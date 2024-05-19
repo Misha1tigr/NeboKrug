@@ -16,7 +16,7 @@ import time
 import random
 import gettext
 
-selected_locale = load_settings().get("locale", "en")
+selected_locale = load_settings().get("locale", "ua")
 text_object = gettext.translation('main', localedir='../locales', languages=[selected_locale])
 text_object.install()
 _ = text_object.gettext
@@ -43,7 +43,7 @@ def create_menu_bar(root):
         (open_day_in_history_tab, (this_day_history_frame,))
     ]
     menubar.add_command(label=_("Your Locations"), command=lambda: settings_locations_window(root,
-                                                                                          function_list_with_params))
+                                                                                             function_list_with_params))
 
     # Other Settings
     menubar.add_command(label=_("Other Settings"), command=lambda: settings_misc_window(root))
@@ -60,10 +60,12 @@ def create_menu_bar(root):
 
     root.config(menu=menubar)
 
+
 def open_history_tab(master):
     """
     Opens the History tab in the main application.
     """
+
     def on_refresh():
         location = location_var.get()
         if not location:
@@ -153,54 +155,58 @@ def open_history_tab(master):
 
         # Plot each selected column
         if 'temperature_2m_max' in selected_columns:
-            ax_temp.plot(data['date'], data['temperature_2m_max'], label=f'Temperature Max ({temperature_unit})',
+            ax_temp.plot(data['date'], data['temperature_2m_max'],
+                         label=_("Temperature Max (") + f"{temperature_unit})",
                          color=color_cycle[color_index])
             color_index += 1
 
         if 'temperature_2m_min' in selected_columns:
-            ax_temp.plot(data['date'], data['temperature_2m_min'], label=f'Temperature Min ({temperature_unit})',
+            ax_temp.plot(data['date'], data['temperature_2m_min'],
+                         label=_("Temperature Min (") + f"{temperature_unit})",
                          color=color_cycle[color_index])
             color_index += 1
 
         if 'temperature_2m_mean' in selected_columns:
-            ax_temp.plot(data['date'], data['temperature_2m_mean'], label=f'Temperature Mean ({temperature_unit})',
+            ax_temp.plot(data['date'], data['temperature_2m_mean'],
+                         label=_("Temperature Mean (") + f"{temperature_unit})",
                          color=color_cycle[color_index])
             color_index += 1
 
         if 'daylight_duration' in selected_columns:
-            ax_daylight.plot(data['date'], data['daylight_duration'], label='Daylight Duration (seconds)',
+            ax_daylight.plot(data['date'], data['daylight_duration'], label=_("Daylight Duration (seconds)"),
                              color=color_cycle[color_index])
             color_index += 1
 
         if 'precipitation_sum' in selected_columns:
-            ax_precip.bar(data['date'], data['precipitation_sum'], label=f'Precipitation ({precipitation_unit})',
+            ax_precip.bar(data['date'], data['precipitation_sum'],
+                          label=_("Precipitation (") + f"{precipitation_unit})",
                           color=color_cycle[color_index], alpha=0.5, width=1)
             color_index += 1
 
         if 'wind_speed_10m_max' in selected_columns:
-            ax_wind.plot(data['date'], data['wind_speed_10m_max'], label=f'Wind Speed ({wind_speed_unit})',
+            ax_wind.plot(data['date'], data['wind_speed_10m_max'], label=_("Wind Speed (") + f"{wind_speed_unit})",
                          color=color_cycle[color_index])
             color_index += 1
 
         # Set labels and legends
-        ax.set_xlabel('Date')
+        ax.set_xlabel(_("Date"))
         ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
         ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 10)))
 
         if ax_temp:
-            ax_temp.set_ylabel(f'Temperature ({temperature_unit})')
+            ax_temp.set_ylabel(_("Temperature (") + f"{temperature_unit})")
             ax_temp.legend(loc='upper left')
 
         if ax_precip:
-            ax_precip.set_ylabel(f'Precipitation ({precipitation_unit})')
+            ax_precip.set_ylabel(_("Precipitation (") + f"{precipitation_unit})")
             ax_precip.legend(loc='upper right')
 
         if ax_daylight:
-            ax_daylight.set_ylabel('Daylight Duration (seconds)')
+            ax_daylight.set_ylabel(_("Daylight Duration (seconds)"))
             ax_daylight.legend(loc='lower left')
 
         if ax_wind:
-            ax_wind.set_ylabel(f'Wind Speed ({wind_speed_unit})')
+            ax_wind.set_ylabel(_("Wind Speed (") + f"{wind_speed_unit})")
             ax_wind.legend(loc='lower right')
 
         # Remove the left spine if no temperature data is plotted there
@@ -243,17 +249,20 @@ def open_history_tab(master):
 
     # Checkboxes for data selection
     temperature_max_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text=_("Temperature Max"), variable=temperature_max_var).grid(column=2, row=0, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature Max"), variable=temperature_max_var).grid(column=2, row=0, padx=5,
+                                                                                         pady=5)
 
     temperature_min_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text=_("Temperature Min"), variable=temperature_min_var).grid(column=2, row=1, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature Min"), variable=temperature_min_var).grid(column=2, row=1, padx=5,
+                                                                                         pady=5)
 
     temperature_mean_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text=_("Temperature Mean"), variable=temperature_mean_var).grid(column=2, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Temperature Mean"), variable=temperature_mean_var).grid(column=2, row=2, padx=5,
+                                                                                           pady=5)
 
     daylight_duration_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Daylight Duration"), variable=daylight_duration_var).grid(column=3, row=0, padx=5,
-                                                                                          pady=5)
+                                                                                             pady=5)
 
     precipitation_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Precipitation"), variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
@@ -277,6 +286,7 @@ def open_forecast_tab(master):
     """
     Opens the Forecast tab in the main application.
     """
+
     def on_refresh(fetch_new_data=True):
         location = location_var.get()
         if not location:
@@ -368,65 +378,66 @@ def open_forecast_tab(master):
         show_primary_axis = False
         for col in selected_columns:
             if col == 'temperature_2m':
-                line, = ax.plot(data['date'], data['temperature_2m'], label='Temperature',
+                line, = ax.plot(data['date'], data['temperature_2m'], label=_("Temperature"),
                                 color=color_cycle[color_index])
                 legend_handles.append(line)
                 show_primary_axis = True
-                ax.set_ylabel(f'Temperature ({temperature_unit})')
+                ax.set_ylabel(_("Temperature (") + f"{temperature_unit})")
                 axis_position -= 60
             elif col == 'relative_humidity_2m':
                 rh_ax = get_or_create_axis('Relative Humidity', axis_position, 'left')
-                line, = rh_ax.plot(data['date'], data['relative_humidity_2m'], label='Relative Humidity',
+                line, = rh_ax.plot(data['date'], data['relative_humidity_2m'], label=_("Relative Humidity"),
                                    color=color_cycle[color_index])
                 legend_handles.append(line)
-                rh_ax.set_ylabel('Relative Humidity (%)')
+                rh_ax.set_ylabel(_("Relative Humidity (%)"))
             elif col == 'apparent_temperature':
-                line, = ax.plot(data['date'], data['apparent_temperature'], label='Apparent Temperature',
+                line, = ax.plot(data['date'], data['apparent_temperature'], label=_("Apparent Temperature"),
                                 color=color_cycle[color_index])
                 legend_handles.append(line)
                 show_primary_axis = True
-                ax.set_ylabel(f'Apparent Temperature ({temperature_unit})')
+                ax.set_ylabel(_("Apparent Temperature (") + f"{temperature_unit})")
                 axis_position -= 60
             elif col == 'precipitation_probability':
                 pp_ax = get_or_create_axis('Precipitation Probability', axis_position, 'right')
-                line, = pp_ax.plot(data['date'], data['precipitation_probability'], label='Precipitation Probability',
+                line, = pp_ax.plot(data['date'], data['precipitation_probability'],
+                                   label=_("Precipitation Probability"),
                                    color=color_cycle[color_index])
                 legend_handles.append(line)
-                pp_ax.set_ylabel('Precipitation Probability (%)')
+                pp_ax.set_ylabel(_("Precipitation Probability (%)"))
             elif col == 'precipitation':
                 precip_ax = get_or_create_axis('Precipitation', axis_position, 'right')
-                bar = precip_ax.bar(data['date'], data['precipitation'], label='Precipitation',
+                bar = precip_ax.bar(data['date'], data['precipitation'], label=_("Precipitation"),
                                     color=color_cycle[color_index], alpha=0.5, width=0.13)
                 legend_handles.append(bar)
-                precip_ax.set_ylabel(f'Precipitation ({precipitation_unit})')
+                precip_ax.set_ylabel(_("Precipitation (") + f"{precipitation_unit})")
             elif col == 'surface_pressure':
                 sp_ax = get_or_create_axis('Surface Pressure', axis_position, 'right')
-                line, = sp_ax.plot(data['date'], data['surface_pressure'], label='Surface Pressure',
+                line, = sp_ax.plot(data['date'], data['surface_pressure'], label=_("Surface Pressure"),
                                    color=color_cycle[color_index])
                 legend_handles.append(line)
-                sp_ax.set_ylabel('Surface Pressure (hPa)')
+                sp_ax.set_ylabel(_("Surface Pressure (hPa)"))
             elif col == 'visibility':
                 vis_ax = get_or_create_axis('Visibility', axis_position, 'right')
-                line, = vis_ax.plot(data['date'], data['visibility'], label='Visibility',
+                line, = vis_ax.plot(data['date'], data['visibility'], label=_("Visibility"),
                                     color=color_cycle[color_index])
                 legend_handles.append(line)
-                vis_ax.set_ylabel('Visibility (m)')
+                vis_ax.set_ylabel(_("Visibility (m)"))
             elif col == 'wind_speed_10m':
                 ws_ax = get_or_create_axis('Wind Speed', axis_position, 'right')
-                line, = ws_ax.plot(data['date'], data['wind_speed_10m'], label='Wind Speed',
+                line, = ws_ax.plot(data['date'], data['wind_speed_10m'], label=_("Wind Speed"),
                                    color=color_cycle[color_index])
                 legend_handles.append(line)
-                ws_ax.set_ylabel(f'Wind Speed ({wind_speed_unit})')
+                ws_ax.set_ylabel(_("Wind Speed (") + f"{wind_speed_unit})")
             elif col == 'uv_index':
                 uv_ax = get_or_create_axis('UV Index', axis_position, 'right')
-                line, = uv_ax.plot(data['date'], data['uv_index'], label='UV Index', color=color_cycle[color_index])
+                line, = uv_ax.plot(data['date'], data['uv_index'], label=_("UV Index"), color=color_cycle[color_index])
                 legend_handles.append(line)
-                uv_ax.set_ylabel('UV Index')
+                uv_ax.set_ylabel(_("UV Index"))
             color_index += 1
             axis_position += 60
 
         # Always set up the x-axis
-        ax.set_xlabel('Date')
+        ax.set_xlabel(_("Date"))
         ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
         ax.xaxis.set_major_locator(plt.MaxNLocator(len(data['date']) // (len(data['date']) // 8)))
 
@@ -463,22 +474,25 @@ def open_forecast_tab(master):
 
     relative_humidity_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Relative Humidity"), variable=relative_humidity_var).grid(column=2, row=1, padx=5,
-                                                                                          pady=5)
+                                                                                             pady=5)
 
     apparent_temperature_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text=_("Apparent Temperature"), variable=apparent_temperature_var).grid(column=2, row=2, padx=5,
-                                                                                                pady=5)
+    ttk.Checkbutton(frame, text=_("Apparent Temperature"), variable=apparent_temperature_var).grid(column=2, row=2,
+                                                                                                   padx=5,
+                                                                                                   pady=5)
 
     precipitation_probability_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Precipitation Probability"), variable=precipitation_probability_var).grid(column=3,
-                                                                                                          row=0, padx=5,
-                                                                                                          pady=5)
+                                                                                                             row=0,
+                                                                                                             padx=5,
+                                                                                                             pady=5)
 
     precipitation_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Precipitation"), variable=precipitation_var).grid(column=3, row=1, padx=5, pady=5)
 
     surface_pressure_var = tk.BooleanVar()
-    ttk.Checkbutton(frame, text=_("Surface Pressure"), variable=surface_pressure_var).grid(column=3, row=2, padx=5, pady=5)
+    ttk.Checkbutton(frame, text=_("Surface Pressure"), variable=surface_pressure_var).grid(column=3, row=2, padx=5,
+                                                                                           pady=5)
 
     visibility_var = tk.BooleanVar()
     ttk.Checkbutton(frame, text=_("Visibility"), variable=visibility_var).grid(column=4, row=0, padx=5, pady=5)
@@ -515,7 +529,7 @@ def loading_animation(flag, loading_label):
     animation_symbols = ['|', '/', '–', '\\']
     i = 0
     while not flag.is_set():
-        loading_label.config(text=_("Loading") +f"{animation_symbols[i % len(animation_symbols)]}")
+        loading_label.config(text=_("Loading") + f"{animation_symbols[i % len(animation_symbols)]}")
         i += 1
         time.sleep(0.1)
     loading_label.config(text="")  # Clear the loading text once done
@@ -604,8 +618,9 @@ def display_weather_facts(frame):
     """
     Displays weather fun facts in the Fun Facts tab.
     """
+
     def get_random_fact(file_path):
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             facts = file.readlines()
         return random.choice(facts).strip().replace('\\n', '\n')
 
@@ -627,13 +642,19 @@ def display_weather_facts(frame):
         frame.columnconfigure(i, weight=1, minsize=150)
         frame.rowconfigure(i + 1, weight=1, minsize=100)
 
-    long_file = './fun_facts/long1_en.txt'
-    mid_file = './fun_facts/mid1_en.txt'
-    short_file1 = './fun_facts/short1_en.txt'
-    short_file2 = './fun_facts/short2_en.txt'
+    if selected_locale == 'en':
+        long_file = './fun_facts/long1_en.txt'
+        mid_file = './fun_facts/mid1_en.txt'
+        short_file1 = './fun_facts/short1_en.txt'
+        short_file2 = './fun_facts/short2_en.txt'
+    else:
+        long_file = './fun_facts/long1_ua.txt'
+        mid_file = './fun_facts/mid1_ua.txt'
+        short_file1 = './fun_facts/short1_ua.txt'
+        short_file2 = './fun_facts/short2_ua.txt'
 
     ttk.Label(frame, text=_("Weather fun facts just for you"), font="bold").grid(column=0, row=0, padx=5, pady=5,
-                                                                              columnspan=2)
+                                                                                 columnspan=2)
     # Create buttons and place them in the grid
     long_title, long_fact = get_fact_and_title(long_file)
     button1 = tk.Button(frame, text=f"{long_title}\n\n{long_fact}", wraplength=300, relief="ridge",
