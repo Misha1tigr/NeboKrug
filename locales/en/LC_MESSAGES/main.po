@@ -15,225 +15,238 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: C:/NeboKrug/src/main.py:35
+#: C:/NeboKrug/src/main.py:37
 msgid "Units of Measurement"
 msgstr "Units of Measurement"
 
-#: C:/NeboKrug/src/main.py:45
+#: C:/NeboKrug/src/main.py:47
 msgid "Your Locations"
 msgstr "Your Locations"
 
-#: C:/NeboKrug/src/main.py:49
+#: C:/NeboKrug/src/main.py:51
 msgid "Other Settings"
 msgstr "Language Settings"
 
-#: C:/NeboKrug/src/main.py:53
+#: C:/NeboKrug/src/main.py:55
 msgid "Help"
 msgstr "Help"
 
-#: C:/NeboKrug/src/main.py:54
+#: C:/NeboKrug/src/main.py:56
 msgid "Feedback"
 msgstr "Feedback"
 
-#: C:/NeboKrug/src/main.py:55
+#: C:/NeboKrug/src/main.py:57
 msgid "About"
 msgstr "About"
 
-#: C:/NeboKrug/src/main.py:56
+#: C:/NeboKrug/src/main.py:58
 msgid "Info"
 msgstr "Info"
 
-#: C:/NeboKrug/src/main.py:59
+#: C:/NeboKrug/src/main.py:61
 msgid "Exit"
 msgstr "Exit"
 
-#: C:/NeboKrug/src/main.py:72 C:/NeboKrug/src/main.py:78
-#: C:/NeboKrug/src/main.py:116 C:/NeboKrug/src/main.py:293
-#: C:/NeboKrug/src/main.py:346 C:/NeboKrug/src/main.py:558
-#: C:/NeboKrug/src/main.py:695
+#: C:/NeboKrug/src/main.py:74 C:/NeboKrug/src/main.py:80
+#: C:/NeboKrug/src/main.py:118 C:/NeboKrug/src/main.py:295
+#: C:/NeboKrug/src/main.py:348 C:/NeboKrug/src/main.py:560
+#: C:/NeboKrug/src/main.py:704 C:/NeboKrug/src/main.py:847
+#: C:/NeboKrug/src/main.py:858
 msgid "Error"
 msgstr "Error"
 
-#: C:/NeboKrug/src/main.py:72 C:/NeboKrug/src/main.py:293
-#: C:/NeboKrug/src/main.py:558 C:/NeboKrug/src/main.py:695
+#: C:/NeboKrug/src/main.py:74 C:/NeboKrug/src/main.py:295
+#: C:/NeboKrug/src/main.py:560 C:/NeboKrug/src/main.py:704
 msgid "Please select a location."
 msgstr "Please select a location."
 
-#: C:/NeboKrug/src/main.py:78
+#: C:/NeboKrug/src/main.py:80
 msgid "Please select a date range."
 msgstr "Please select a date range."
 
-#: C:/NeboKrug/src/main.py:116 C:/NeboKrug/src/main.py:346
+#: C:/NeboKrug/src/main.py:118 C:/NeboKrug/src/main.py:348
 msgid "Please select at least one data type to display."
 msgstr "Please select at least one data type to display."
 
-#: C:/NeboKrug/src/main.py:159
+#: C:/NeboKrug/src/main.py:161
 msgid "Temperature Max ("
 msgstr "Temperature Max ("
 
-#: C:/NeboKrug/src/main.py:165
+#: C:/NeboKrug/src/main.py:167
 msgid "Temperature Min ("
 msgstr "Temperature Min ("
 
-#: C:/NeboKrug/src/main.py:171
+#: C:/NeboKrug/src/main.py:173
 msgid "Temperature Mean ("
 msgstr "Temperature Mean ("
 
-#: C:/NeboKrug/src/main.py:176 C:/NeboKrug/src/main.py:205
+#: C:/NeboKrug/src/main.py:178 C:/NeboKrug/src/main.py:207
 msgid "Daylight Duration (seconds)"
 msgstr "Daylight Duration (seconds)"
 
-#: C:/NeboKrug/src/main.py:182 C:/NeboKrug/src/main.py:201
-#: C:/NeboKrug/src/main.py:412
+#: C:/NeboKrug/src/main.py:184 C:/NeboKrug/src/main.py:203
+#: C:/NeboKrug/src/main.py:414
 msgid "Precipitation ("
 msgstr "Precipitation ("
 
-#: C:/NeboKrug/src/main.py:187 C:/NeboKrug/src/main.py:209
-#: C:/NeboKrug/src/main.py:430
+#: C:/NeboKrug/src/main.py:189 C:/NeboKrug/src/main.py:211
+#: C:/NeboKrug/src/main.py:432
 msgid "Wind Speed ("
 msgstr "Wind Speed ("
 
-#: C:/NeboKrug/src/main.py:192 C:/NeboKrug/src/main.py:440
+#: C:/NeboKrug/src/main.py:194 C:/NeboKrug/src/main.py:442
 msgid "Date"
 msgstr "Date"
 
-#: C:/NeboKrug/src/main.py:197 C:/NeboKrug/src/main.py:385
+#: C:/NeboKrug/src/main.py:199 C:/NeboKrug/src/main.py:387
 msgid "Temperature ("
 msgstr "Temperature ("
 
-#: C:/NeboKrug/src/main.py:226 C:/NeboKrug/src/main.py:459
-#: C:/NeboKrug/src/main.py:592 C:/NeboKrug/src/main.py:730
+#: C:/NeboKrug/src/main.py:228 C:/NeboKrug/src/main.py:461
+#: C:/NeboKrug/src/main.py:594 C:/NeboKrug/src/main.py:739
 msgid "Location"
 msgstr "Location"
 
-#: C:/NeboKrug/src/main.py:239
+#: C:/NeboKrug/src/main.py:241
 msgid "Start Date"
 msgstr "Start Date"
 
-#: C:/NeboKrug/src/main.py:245
+#: C:/NeboKrug/src/main.py:247
 msgid "End Date"
 msgstr "End Date"
 
-#: C:/NeboKrug/src/main.py:252
+#: C:/NeboKrug/src/main.py:254
 msgid "Temperature Max"
 msgstr "Temperature Max"
 
-#: C:/NeboKrug/src/main.py:256
+#: C:/NeboKrug/src/main.py:258
 msgid "Temperature Min"
 msgstr "Temperature Min"
 
-#: C:/NeboKrug/src/main.py:260
+#: C:/NeboKrug/src/main.py:262
 msgid "Temperature Mean"
 msgstr "Temperature Mean"
 
-#: C:/NeboKrug/src/main.py:264
+#: C:/NeboKrug/src/main.py:266
 msgid "Daylight Duration"
 msgstr "Daylight Duration"
 
-#: C:/NeboKrug/src/main.py:268 C:/NeboKrug/src/main.py:409
-#: C:/NeboKrug/src/main.py:491
+#: C:/NeboKrug/src/main.py:270 C:/NeboKrug/src/main.py:411
+#: C:/NeboKrug/src/main.py:493
 msgid "Precipitation"
 msgstr "Precipitation"
 
-#: C:/NeboKrug/src/main.py:271 C:/NeboKrug/src/main.py:427
-#: C:/NeboKrug/src/main.py:501
+#: C:/NeboKrug/src/main.py:273 C:/NeboKrug/src/main.py:429
+#: C:/NeboKrug/src/main.py:503
 msgid "Wind Speed"
 msgstr "Wind Speed"
 
-#: C:/NeboKrug/src/main.py:274 C:/NeboKrug/src/main.py:507
-#: C:/NeboKrug/src/main.py:605 C:/NeboKrug/src/main.py:743
+#: C:/NeboKrug/src/main.py:276 C:/NeboKrug/src/main.py:509
+#: C:/NeboKrug/src/main.py:607 C:/NeboKrug/src/main.py:752
 msgid "Refresh"
 msgstr "Refresh"
 
-#: C:/NeboKrug/src/main.py:381 C:/NeboKrug/src/main.py:473
+#: C:/NeboKrug/src/main.py:383 C:/NeboKrug/src/main.py:475
 msgid "Temperature"
 msgstr "Temperature"
 
-#: C:/NeboKrug/src/main.py:389 C:/NeboKrug/src/main.py:476
+#: C:/NeboKrug/src/main.py:391 C:/NeboKrug/src/main.py:478
 msgid "Relative Humidity"
 msgstr "Relative Humidity"
 
-#: C:/NeboKrug/src/main.py:392
+#: C:/NeboKrug/src/main.py:394
 msgid "Relative Humidity (%)"
 msgstr "Relative Humidity (%)"
 
-#: C:/NeboKrug/src/main.py:394 C:/NeboKrug/src/main.py:480
+#: C:/NeboKrug/src/main.py:396 C:/NeboKrug/src/main.py:482
 msgid "Apparent Temperature"
 msgstr "Apparent Temperature"
 
-#: C:/NeboKrug/src/main.py:398
+#: C:/NeboKrug/src/main.py:400
 msgid "Apparent Temperature ("
 msgstr "Apparent Temperature ("
 
-#: C:/NeboKrug/src/main.py:403 C:/NeboKrug/src/main.py:485
+#: C:/NeboKrug/src/main.py:405 C:/NeboKrug/src/main.py:487
 msgid "Precipitation Probability"
 msgstr "Precipitation Probability"
 
-#: C:/NeboKrug/src/main.py:406
+#: C:/NeboKrug/src/main.py:408
 msgid "Precipitation Probability (%)"
 msgstr "Precipitation Probability (%)"
 
-#: C:/NeboKrug/src/main.py:415 C:/NeboKrug/src/main.py:494
+#: C:/NeboKrug/src/main.py:417 C:/NeboKrug/src/main.py:496
 msgid "Surface Pressure"
 msgstr "Surface Pressure"
 
-#: C:/NeboKrug/src/main.py:418
+#: C:/NeboKrug/src/main.py:420
 msgid "Surface Pressure (hPa)"
 msgstr "Surface Pressure (hPa)"
 
-#: C:/NeboKrug/src/main.py:421 C:/NeboKrug/src/main.py:498
+#: C:/NeboKrug/src/main.py:423 C:/NeboKrug/src/main.py:500
 msgid "Visibility"
 msgstr "Visibility"
 
-#: C:/NeboKrug/src/main.py:424
+#: C:/NeboKrug/src/main.py:426
 msgid "Visibility (m)"
 msgstr "Visibility (m)"
 
-#: C:/NeboKrug/src/main.py:433 C:/NeboKrug/src/main.py:435
-#: C:/NeboKrug/src/main.py:504
+#: C:/NeboKrug/src/main.py:435 C:/NeboKrug/src/main.py:437
+#: C:/NeboKrug/src/main.py:506
 msgid "UV Index"
 msgstr "UV Index"
 
-#: C:/NeboKrug/src/main.py:518
+#: C:/NeboKrug/src/main.py:520
 msgid "Forecast Days"
 msgstr "Forecast Days"
 
-#: C:/NeboKrug/src/main.py:532
+#: C:/NeboKrug/src/main.py:534 C:/NeboKrug/src/main.py:769
+#: C:/NeboKrug/src/main.py:781
 msgid "Loading"
 msgstr "Loading "
 
-#: C:/NeboKrug/src/main.py:552
+#: C:/NeboKrug/src/main.py:554
 msgid "Clothing Recommendations"
 msgstr "Clothing Recommendations"
 
-#: C:/NeboKrug/src/main.py:650
+#: C:/NeboKrug/src/main.py:659
 msgid "Weather fun facts just for you"
 msgstr "Weather fun facts just for you"
 
-#: C:/NeboKrug/src/main.py:688
+#: C:/NeboKrug/src/main.py:697
 msgid "What is today like, compared to previous years?"
 msgstr "What is today like, compared to previous years?"
 
-#: C:/NeboKrug/src/main.py:766
+#: C:/NeboKrug/src/main.py:807
 msgid "Forecast"
 msgstr "Forecast"
 
-#: C:/NeboKrug/src/main.py:771
+#: C:/NeboKrug/src/main.py:812
 msgid "AI Recommendations"
 msgstr "AI Recommendations"
 
-#: C:/NeboKrug/src/main.py:776
+#: C:/NeboKrug/src/main.py:817
 msgid "History"
 msgstr "History"
 
-#: C:/NeboKrug/src/main.py:781
+#: C:/NeboKrug/src/main.py:822
 msgid "This day in history"
 msgstr "This day in history"
 
-#: C:/NeboKrug/src/main.py:786
+#: C:/NeboKrug/src/main.py:827
 msgid "Fun fact"
 msgstr "Fun fact"
 
-#: C:/NeboKrug/src/main.py:791
+#: C:/NeboKrug/src/main.py:845
+msgid ""
+"Sorry, an exception has occurred.\n"
+"Please report this exception to the developer\n"
+"\n"
+msgstr "Sorry, an exception has occurred.\nPlease report this exception to the developer\n\n"
+
+#: C:/NeboKrug/src/main.py:851
 msgid "NeboKrug"
 msgstr "NeboKrug"
+
+#: C:/NeboKrug/src/main.py:858
+msgid "Check your internet connection."
+msgstr ""

@@ -55,17 +55,17 @@ def load_settings():
         dict: The loaded settings.
     """
     global settings_loaded, settings
-    if not settings_loaded:
-        settings_path = get_settings_path()
-        if os.path.exists(settings_path):
-            with open(settings_path, "r") as file:
-                settings = json.load(file)
-                validate_settings(settings)
-                settings_loaded = True
-                return settings
-    else:
+    try:
+        if not settings_loaded:
+            settings_path = get_settings_path()
+            if os.path.exists(settings_path):
+                with open(settings_path, "r") as file:
+                    settings = json.load(file)
+                    validate_settings(settings)
+                    settings_loaded = True
         return settings
-
+    except Exception as e:
+        raise RuntimeError(str(e))
 
 def save_settings(new_settings):
     """
@@ -81,7 +81,7 @@ def save_settings(new_settings):
         with open(settings_path, "w") as file:
             json.dump(new_settings, file)
     except Exception as e:
-        print(f"Error saving settings: {e}")
+        raise RuntimeError(str(e))
     settings = new_settings
 
 
@@ -98,7 +98,7 @@ def validate_settings(settings_for_validation):
     try:
         validate(instance=settings_for_validation, schema=settings_schema)
     except ValidationError as e:
-        raise ValueError(f"Invalid settings: {e.message}")
+        raise ValueError(str(e))
 
 
 def save_locations(locations):

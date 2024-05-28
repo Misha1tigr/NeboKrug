@@ -11,11 +11,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.dates import DateFormatter
 import pandas as pd
 from tkcalendar import DateEntry
+from urllib import request
+import sys
 import threading
 import time
 import random
 import gettext
-
+import traceback
 selected_locale = load_settings().get("locale", "ua")
 text_object = gettext.translation('main', localedir='../locales', languages=[selected_locale])
 text_object.install()
@@ -535,7 +537,7 @@ def loading_animation(flag, loading_label):
     loading_label.config(text="")  # Clear the loading text once done
 
 
-def open_clothing_recommendations_tab(frame):
+def open_clothing_recommendations_tab(frame, load_default = False):
     """
     Opens the Clothing Recommendations tab in the main application.
     """
@@ -572,12 +574,12 @@ def open_clothing_recommendations_tab(frame):
         temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
 
         # Start the loading animation in a separate thread
-        loading_thread = threading.Thread(target=loading_animation, args=(stop_loading, loading_label))
+        loading_thread = threading.Thread(target=loading_animation, args=(stop_loading, loading_label), daemon=True)
         loading_thread.start()
 
         # Get clothing recommendations in a separate thread
         recommendations_thread = threading.Thread(target=get_recommendations, args=(
-            latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit))
+            latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit), daemon=True)
         recommendations_thread.start()
 
     def get_recommendations(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit):
@@ -612,7 +614,8 @@ def open_clothing_recommendations_tab(frame):
     # Label to display the clothing recommendations
     recommendation_label = ttk.Label(frame, text="", wraplength=400, justify="center")
     recommendation_label.grid(column=0, row=3, columnspan=3, padx=5, pady=20, sticky='n')
-
+    if load_default and location_var.get():
+        on_refresh()
 
 def display_weather_facts(frame):
     """
@@ -677,7 +680,7 @@ def display_weather_facts(frame):
     button4.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
 
 
-def open_day_in_history_tab(frame):
+def open_day_in_history_tab(frame, load_default = False):
     """
     Generates the "This Day in History" tab in the main application.
     """
@@ -715,12 +718,12 @@ def open_day_in_history_tab(frame):
         temperature_unit, wind_speed_unit, precipitation_unit = extract_units()
 
         # Start the loading animation in a separate thread
-        loading_thread = threading.Thread(target=loading_animation, args=(stop_loading, loading_label))
+        loading_thread = threading.Thread(target=loading_animation, args=(stop_loading, loading_label), daemon=True)
         loading_thread.start()
 
         # Get clothing recommendations in a separate thread
         recommendations_thread = threading.Thread(target=load_data, args=(
-            latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit))
+            latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit), daemon=True)
         recommendations_thread.start()
 
     def load_data(latitude, longitude, temperature_unit, wind_speed_unit, precipitation_unit):
@@ -757,6 +760,38 @@ def open_day_in_history_tab(frame):
     recommendation_label = ttk.Label(frame, text="", wraplength=400, justify="center")
     recommendation_label.grid(column=0, row=3, columnspan=3, padx=5, pady=20, sticky='n')
 
+    if load_default and location_var.get():
+        on_refresh()
+
+def update_label(flag, loading_text):
+    i = 0
+    while flag.is_set():
+        loading_text.configure(text=(_("Loading") + "." * i))
+        i += 1
+        if i >= 10:
+            i = 0
+        time.sleep(0.1)
+    loading_text.master.master.grab_release()
+    loading_text.master.master.destroy()
+
+def mainwindow_loading_animation(flag):
+    """Opens a loading window."""
+    flag.set()
+    window = tk.Tk()
+    window.title(_("Loading"))
+    window.geometry("200x50")
+    window.grab_set()
+    window.attributes("-toolwindow", True)
+    frame = ttk.Frame(window, padding="10")
+    frame.pack(fill='both', expand=True)
+
+    loading_text = ttk.Label(frame, text=".", justify="center", font="bold")
+    loading_text.grid(column=0, row=0, padx=5, pady=5)
+
+    # Run update_label in a separate thread
+    threading.Thread(target=update_label, args=(flag, loading_text), daemon=True).start()
+
+    window.mainloop()
 
 def create_tabs(root):
     """
@@ -773,7 +808,7 @@ def create_tabs(root):
 
     # Clothing recommendations Tab
     forecast_ai_frame = ttk.Frame(notebook, padding="10")
-    open_clothing_recommendations_tab(forecast_ai_frame)
+    open_clothing_recommendations_tab(forecast_ai_frame, True)
     notebook.add(forecast_ai_frame, text=_("AI Recommendations"))
 
     # History Tab
@@ -783,7 +818,7 @@ def create_tabs(root):
 
     # This day in history Tab
     this_day_history_frame = ttk.Frame(notebook, padding="10")
-    open_day_in_history_tab(this_day_history_frame)
+    open_day_in_history_tab(this_day_history_frame, True)
     notebook.add(this_day_history_frame, text=_("This day in history"))
 
     # Fun fact Tab
@@ -791,14 +826,43 @@ def create_tabs(root):
     display_weather_facts(fun_fact_frame)
     notebook.add(fun_fact_frame, text=_("Fun fact"))
 
+def test_connection():
+    """
+    Checks if the internet connection is working.
+    """
+    try:
+        request.urlopen('https://api.open-meteo.com/v1/forecast?latitude=1&longitude=1&daily=weather_code'
+                        '&forecast_days=1', timeout=1)
+        return True
+    except:
+        return False
+
+
+def custom_tkinter_exception_handler(exc_type, exc_value, exc_traceback):
+    """
+    This function is called when an uncaught exception occurs.
+    """
+    error_message = _("Sorry, an exception has occurred.\nPlease report this exception to the developer\n\n")
+    error_message += ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+    messagebox.showerror(_("Error"), error_message)
 
 def initialize_main_window():
     root = tk.Tk()
     root.title(_("NeboKrug"))
+    root.report_callback_exception = custom_tkinter_exception_handler
+    main_loading_flag = threading.Event()
+    main_loading_animation_thread = threading.Thread(target=mainwindow_loading_animation, args=(main_loading_flag,), daemon=True)
+    main_loading_animation_thread.start()
+    if not test_connection() and False:
+        main_loading_flag.clear()
+        messagebox.showerror(_("Error"), _("Check your internet connection."))
+        root.destroy()
+        sys.exit(1)
     create_tabs(root)
     create_menu_bar(root)
+    main_loading_flag.clear()
+    root.focus_force()
     root.mainloop()
-
 
 if __name__ == "__main__":
     initialize_main_window()
