@@ -1,11 +1,17 @@
-# This code is part of the server application, that is used to connect to Google's AI.
-# Not to be used in main application
-
-import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import google.generativeai as genai
+import os
 
 app = Flask(__name__)
+
+# Configure Rate Limiting
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
 
 # Configure Google API
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -14,6 +20,7 @@ model = genai.GenerativeModel('gemini-pro')
 
 
 @app.route('/generate', methods=['POST'])
+@limiter.limit("200 per day; 30 per hour; 10 per minute")  # Custom rate limit for this endpoint
 def generate():
     """
     This function generates content using the provided prompt.
@@ -38,7 +45,7 @@ def generate():
         response = model.generate_content(prompt)
         return jsonify({"response": response.text}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"Error": str(e)}), 500
 
 
 @app.route('/')
