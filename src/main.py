@@ -764,6 +764,9 @@ def open_day_in_history_tab(frame, load_default = False):
         on_refresh()
 
 def update_label(flag, loading_text):
+    """
+    Updates the loading animation label.
+    """
     i = 0
     while flag.is_set():
         loading_text.configure(text=(_("Loading") + "." * i))
@@ -847,6 +850,9 @@ def custom_tkinter_exception_handler(exc_type, exc_value, exc_traceback):
     messagebox.showerror(_("Error"), error_message)
 
 def initialize_main_window():
+    """
+    Initializes the main window.
+    """
     root = tk.Tk()
     root.title(_("NeboKrug"))
     root.report_callback_exception = custom_tkinter_exception_handler
